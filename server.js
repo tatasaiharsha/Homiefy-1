@@ -101,7 +101,6 @@ async function addNewUser(req,res,data){
         res.send("email is taken")
 
         
-        
       
     }
     else {
