@@ -1,18 +1,22 @@
-const  db = require('./firebase');
-const {collection, addDoc,doc, setDoc,getDoc } =  require("firebase/firestore");
+const  firebaseObj = require('./firebase');
+const {doc, setDoc,getDoc} =  require("firebase/firestore");
+const {uploadBytes,ref,getDownloadURL } =  require("firebase/storage");
 const express = require('express');
 const config = require('./config')
-// const path = require("path");
-// const router = express.Router();
+const fileUpload = require('express-fileupload');
+
+
 const app = express();
 const cors  = require('cors')
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
+const bcrypt = require('bcryptjs')
+// const port = 8001
 
-const port = 8001
-// const bodyParser = require("body-parser");
 
 const oneDay = 1000 * 60 * 60 * 24;
+
+/// setting sessions config
 app.use(sessions({
     secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
     saveUninitialized:true,
@@ -22,11 +26,8 @@ app.use(sessions({
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(express.static('public'))
-app.use('/css', express.static(__dirname + 'public/css'))
-app.use('/js', express.static(__dirname + 'public/js'))
-app.use('/img', express.static(__dirname + 'public/img'))
-// app.use(bodyParser.urlencoded({ extended: false }));
+app.use(fileUpload()); 
+app.use(express.static(__dirname + '/public'))
 app.use(cors())
 app.use(cookieParser());
 
@@ -39,46 +40,86 @@ app.all('/', cors(), async (req,res)=>{
 
     if(req.method === 'GET'){
         console.log("server here...")
-        res.render('index')
-       
-    }else{
-        const data = req.body 
-       
-        addNewUser(req,res,data)
-        
-        // if (!c){
-        //     await setDoc(doc(db, "Users", email), data);
-        // }else{
-        //     res.send("email is taken")
-        // }
-        
-        
-        //const docRef = await addDoc(collection(db, "Users"),data);
-        
-        //console.log("Document written with ID: ", docRef.id);
+        res.render('index',{msg:""})
+    }
     
-      
-    }
-
 });
 
 
-app.all('/profile', cors(),(req,res)=>{
 
-    if(req.method === 'GET'){
+app.all('/register',cors(), async(req,res)=>{
 
+    if(req.method === 'POST'){
+        const data = req.body;
+        const file = req.files
+       
+        const user = await getDoc(doc(firebaseObj.db, 'Users', data.email));
         
-        if(req.session.userName){
+        if (user.exists()) {
+            
            
-            console.log(req.session)
-            res.render('profile',{user:req.session.userName});
+            res.render('index', {msg:"Email already in use"});
         }
-        else{
-            res.redirect('/')
-        }
+        else {
+            /* ref returns a refence the newly created folder
+                then uploadbytes upload the profile picture to that folder
+                getDownloadURL get the url of the image which is stored in the Users collection
+            */
+            const storageRef = ref(firebaseObj.storage, `profilepicture/${data.email}/${file.profilePicture.name }`); 
+            const uploadedFile = await uploadBytes(storageRef, file.profilePicture.data);
+            const fullPath = uploadedFile.metadata.fullPath;
+            const img = await getDownloadURL(ref(firebaseObj.storage, fullPath));
+            data.profilePicture = img;
+            data.password= await bcrypt.hash(data.password,10);  /// hashed password
+            await setDoc(doc(firebaseObj.db, "Users", data.email), data); ///creating new user in firebase with email as the ID
+        
+            
+            req.session.userName = data.email;
+            res.render('profile',{msg:img})
+                       
+        } 
     }
-
+    else{
+        res.redirect('/');
+    
+    }
+    
 });
+
+app.all('/login', cors(), async(req,res)=>{
+
+    if(req.method === 'POST'){
+        const data = req.body;
+        const user = await getDoc(doc(firebaseObj.db, 'Users', data.email)); // fetching record from firebase
+        
+       
+        if (user.exists()) {
+            
+            const validPassword = await bcrypt.compare(data.password,user._document.data.value.mapValue.fields.password.stringValue)
+            if(validPassword){
+               
+               
+                req.session.userName = data.email;
+              
+                res.redirect('profile')
+            }
+            else{
+               
+                res.render('index',{msg:"wrong password"});
+            }
+    
+        }
+        else {
+            
+            res.render('index',{msg:`No account associated with ${data.email} email`});
+            
+        } 
+    }
+    else{
+        res.redirect('/');
+    }
+});
+
 
 
 app.get('/logout', cors(),(req,res)=>{
@@ -90,26 +131,26 @@ app.get('/logout', cors(),(req,res)=>{
         res.redirect('/');
     });
 });
-async function addNewUser(req,res,data){
 
+app.all('/profile', cors(), async (req,res)=>{
 
-
-    const user = await getDoc(doc(db, 'Users', data.email))
-
-    if (user.exists()) {
-      req.session.userName = data.email
-        res.send("email is taken")
+    if(req.method === 'GET'){
 
         
-      
+        if(req.session.userName){
+            const user = await getDoc(doc(firebaseObj.db, 'Users', req.session.userName));
+            const img = user._document.data.value.mapValue.fields.profilePicture.stringValue;
+        //    const {twitter} = user._document.data.value.mapValue.fields.socialMediaLinks.mapValue.fields;
+            
+        //    console.log(twitter)
+            res.render('profile',{msg:img});
+        }
+        else{
+            res.redirect('/')
+        }
     }
-    else {
-       
-        await setDoc(doc(db, "Users", data.email), data);
-       
-    } 
-    
-}
+
+});
 
 app.listen(config.port, () =>{
     console.log(`listening on port ${config.port}`)
