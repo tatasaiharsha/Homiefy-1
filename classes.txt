@@ -1,1 +1,1 @@
-
+My team and I decide to use NoSQL database for this project so classes will not be used.
