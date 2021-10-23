@@ -1,84 +1,116 @@
-@import url("https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
-* {
+
+*{
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Montserrat", sans-serif;
+  /* background-color: #24252A; */
 }
-body {
-  background: #1c8ef9 !important;
-  min-height: 100vh;
-  display: flex;
-  font-weight: 400;
-  font-family: "Fira Sans", sans-serif;
+header{
+  background-color: #24252A;
+  
 }
+body{
+  /* background-color: #ffff; */
+  background-image: url(../img/background.jpg);
+  background-size: cover;
+  background-position: center;
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-label,
-span {
+}
+li,a,button{
+  /* font-family: "Montserrat", sans-serif; */
   font-weight: 500;
-  font-family: "Fira Sans", sans-serif;
+  font-size: 16px;
+  color: #edf0f1;
+  text-decoration: none;
 }
 
-body,
-html,
-.App,
-#root,
-.auth-wrapper {
-  width: 100%;
-  height: 100%;
-}
-
-.navbar-light {
-  background-color: #ffffff;
-  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
-}
-
-.auth-wrapper {
+header{
   display: flex;
-  justify-content: center;
-  flex-direction: column;
-  text-align: left;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 10%;
 }
 
-.auth-inner {
-  width: 450px;
+.logo{
+  cursor: pointer;
+}
+
+.nav__links{
+  list-style: none;
+}
+
+.nav__links li{
+  display: inline-block;
+  padding: 0px 20px;
+}
+
+.nav__links li a{
+  transition: all 0.3s ease 0s;
+}
+.nav__links li a:hover{
+  color: #0088a9;
+}
+button{
+  padding: 9px 25px;
+  background-color: rgba(0,136,169, 1);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+}
+button:hover{
+  background-color: rgba(0,136,169, 0.8);
+
+}
+
+/* styles for the login | register form */
+
+.loginForm{
+  width: 360px;
+  padding: 10% 0 0;
   margin: auto;
-  background: #ffffff;
-  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
-  padding: 40px 55px 45px 55px;
-  border-radius: 15px;
-  transition: all 0.3s;
 }
 
-.auth-wrapper .form-control:focus {
-  border-color: #167bff;
-  box-shadow: none;
+.registerForm{
+  width: 360px;
+  padding: 10% 0 0;
+  /* padding-top: 100px; */
+  margin: auto;
+  /* display: none; */
 }
-
-.auth-wrapper h3 {
+form{
+  position: relative;
+  z-index: 1;
+  background: #24252A;
+  max-width: 360px;
+  margin: 0 auto 100px;
+  margin-top: 50px;
+  padding: 40px;
   text-align: center;
-  margin: 0;
-  line-height: 1;
-  padding-bottom: 20px;
 }
 
-.custom-control-label {
-  font-weight: 400;
+form input {
+  outline: none;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin:0 0 15px;
+  padding: 15px;
+  box-shadow: border-box;
+  font-size: 14px;
 }
 
-.forgot-password,
-.forgot-password a {
-  text-align: right;
-  font-size: 13px;
-  padding-top: 10px;
-  color: #7f7d7d;
-  margin: 0;
+p{
+  margin: 10px;
+  color: gray;
+  display: flex;
+ 
 }
 
-.forgot-password a {
-  color: #167bff;
+p, a{
+ font-size: 12px;
+  padding: 5px;
 }
