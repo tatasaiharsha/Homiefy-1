@@ -9,3 +9,4 @@
 * Send friend request
 * Chat with users
 * Create session
+* integrate with email sender API
