@@ -4,16 +4,15 @@ const {uploadBytes,ref,getDownloadURL } =  require("firebase/storage");
 const express = require('express');
 const config = require('./config')
 const fileUpload = require('express-fileupload');
-
-
-const app = express();
 const cors  = require('cors')
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
 const bcrypt = require('bcryptjs')
-// const port = 8001
 
 
+const app = express();
+
+const PORT = config.PORT || process.env.PORT;
 const oneDay = 1000 * 60 * 60 * 24;
 
 /// setting sessions config
@@ -23,7 +22,6 @@ app.use(sessions({
     cookie: { maxAge: oneDay },
     resave: false 
 }));
-
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(fileUpload()); 
