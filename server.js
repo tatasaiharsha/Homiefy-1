@@ -11,8 +11,6 @@ const bcrypt = require('bcryptjs')
 
 
 const app = express();
-
-const PORT = config.PORT || process.env.PORT;
 const oneDay = 1000 * 60 * 60 * 24;
 
 /// setting sessions config
