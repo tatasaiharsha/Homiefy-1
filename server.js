@@ -13,7 +13,7 @@ const sessions = require('express-session');
 const bcrypt = require('bcryptjs')
 // const port = 8001
 
-
+const PORT = process.env.PORT || config.PORT 
 const oneDay = 1000 * 60 * 60 * 24;
 
 /// setting sessions config
@@ -152,6 +152,6 @@ app.all('/profile', cors(), async (req,res)=>{
 
 });
 
-app.listen(config.port, () =>{
-    console.log(`listening on port ${config.port}`)
+app.listen(PORT, () =>{
+    console.log(`listening on port ${PORTt}`)
 })
