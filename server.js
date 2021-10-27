@@ -85,28 +85,35 @@ app.all('/register',cors(), async(req,res)=>{
 app.all('/login', cors(), async(req,res)=>{
 
     if(req.method === 'POST'){
-        const data = req.body;
-        const user = await getDoc(doc(firebaseObj.db, 'Users', data.email)); // fetching record from firebase
         
-       
-        if (user.exists()) {
-            
-            const validPassword = await bcrypt.compare(data.password,user._document.data.value.mapValue.fields.password.stringValue)
-            if(validPassword){
-               
-               
-                req.session.userName = data.email;
-              
-                res.redirect('profile')
+        try{
+            const data = req.body;
+            const user = await getDoc(doc(firebaseObj.db, 'Users', data.email))
+
+            if (user.exists()) {
+                
+                try{
+
+                    const validPassword = await bcrypt.compare(data.password,user._document.data.value.mapValue.fields.password.stringValue)
+                    if(validPassword){
+                        
+                        
+                        req.session.userName = data.email;
+                        
+                        res.redirect('profile')
+                    }
+                }
+                catch (err){
+                   
+                    console.log(err)
+                    res.render('index',{msg:"wrong password"});
+                }
+        
             }
-            else{
-               
-                res.render('index',{msg:"wrong password"});
-            }
-    
         }
-        else {
-            
+    
+       catch(err){
+            console.log(err)
             res.render('index',{msg:`No account associated with ${data.email} email`});
             
         } 

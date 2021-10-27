@@ -1,4 +1,4 @@
-const { getFirestore, collection, getDocs, addDoc} = require('firebase/firestore');
+const { getFirestore} = require('firebase/firestore');
 const { getStorage} = require('firebase/storage');
 const firebase = require('firebase/app')
 const config = require('./config')
