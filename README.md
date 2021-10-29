@@ -1,8 +1,16 @@
 # Homiefy
 
-Homiefy is website platform where college studants will be able to find roommates and review their living experience.
+My project consists of building a website where college students will use to find roommates, rate, and review their experiences. The goal is to help college student have more information about their potential roommate and avoid shocks in the future.
 
+On this platform users must register with a valid .edu email to have access to all available features. Users will also be able to use the website to sell/rent college related items such as books and calculators.
 
+## frontend
+* javascript
+* html
+* css
+## backend
+* expressJS
+* firebase storage
 
 ### How to run the project?
 
