@@ -9,12 +9,12 @@
   /* background-color: #24252A; */
 }
 header{
-  background-color: #24252A;
+  background-color: #080808;
   
 }
 body{
   /* background-color: #ffff; */
-  background-image: url(../img/background.jpg);
+  background-image: url("../background.jpg");
   background-size: cover;
   background-position: center;
 
@@ -69,23 +69,57 @@ button:hover{
 /* styles for the login | register form */
 
 .loginForm{
-  width: 360px;
-  padding: 10% 0 0;
-  margin: auto;
-}
-
-.registerForm{
+  top: -150px;
+  left: 50px;
+  opacity:0;
+  transform: translate(-50%,-50%) scale(1.25);
   width: 360px;
   padding: 10% 0 0;
   /* padding-top: 100px; */
   margin: auto;
   /* display: none; */
+  transition: top 0ms ease-in-out 200ms,
+              opacity 200ms ease-in-out 0ms,
+              transform 20ms ease-in-out 0ms;
+}
+.loginForm.active {
+  top: 50px;
+  opacity: 1;
+  transform: translate(-50%,-50%) scale(1);
+  transition: top 0ms ease-in-out 0ms,
+              opacity 200ms ease-in-out 0ms,
+              transform 20ms ease-in-out 0ms;
+}
+
+.registerForm{
+  top: -150px;
+  left: 50px;
+  opacity:0;
+  transform: translate(-50%,-50%) scale(1.25);
+  width: 360px;
+  padding: 10% 0 0;
+  /* padding-top: 100px; */
+  margin: auto;
+  /* display: none; */
+  transition: top 0ms ease-in-out 200ms,
+              opacity 200ms ease-in-out 0ms,
+              transform 20ms ease-in-out 0ms;
+}
+.registerForm.active {
+  top: 50px;
+  opacity: 1;
+  transform: translate(-50%,-50%) scale(1);
+  transition: top 0ms ease-in-out 0ms,
+              opacity 200ms ease-in-out 0ms,
+              transform 20ms ease-in-out 0ms;
 }
 form{
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
   z-index: 1;
-  background: #24252A;
-  max-width: 360px;
+  background: #0d0e0d;
+  width: 360px;
   margin: 0 auto 100px;
   margin-top: 50px;
   padding: 40px;
@@ -102,7 +136,6 @@ form input {
   box-shadow: border-box;
   font-size: 14px;
 }
-
 p{
   margin: 10px;
   color: gray;
@@ -113,4 +146,28 @@ p{
 p, a{
  font-size: 12px;
   padding: 5px;
+  cursor: pointer;
+}
+.registerForm .close-btn{
+  position:absolute;
+  top: 5px;
+  right: 10px;
+  width: 15px;
+  background: #888;
+  color: #1220e9;
+  line-height: 15px;
+  border-radius: 15px;
+  cursor: pointer;
+
+}
+.loginForm .close-btn{
+  position:absolute;
+  top: 5px;
+  right: 10px;
+  width: 15px;
+  background: #888;
+  color: #1220e9;
+  line-height: 15px;
+  border-radius: 15px;
+  cursor: pointer;
 }
