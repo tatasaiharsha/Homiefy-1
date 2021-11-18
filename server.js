@@ -88,8 +88,8 @@ app.post('/login', cors(), async (req, res) => {
 
    
 
+        const data = req.body;
         try {
-            const data = req.body;
             const user = await getDoc(doc(firebaseObj.db, 'Users', data.email))
 
             if (user.exists()) {
