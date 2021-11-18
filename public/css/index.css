@@ -9,7 +9,7 @@
   /* background-color: #24252A; */
 }
 header{
-  background-color: #080808;
+  background-color: #e9ecef;
   
 }
 body{
@@ -17,13 +17,20 @@ body{
   background-image: url("../img/background.jpg");
   background-size: cover;
   background-position: center;
+  position: relative;
 
+}
+
+.logo p{
+
+  color: #6c757d;
+  font-size: 1.1em ;
 }
 li,a,button{
   /* font-family: "Montserrat", sans-serif; */
   font-weight: 500;
   font-size: 16px;
-  color: #edf0f1;
+  color: #007bff;
   text-decoration: none;
 }
 
@@ -49,13 +56,14 @@ header{
 
 .nav__links li a{
   transition: all 0.3s ease 0s;
+  font-size: 1.1rem;
 }
 .nav__links li a:hover{
   color: #0088a9;
 }
 button{
   padding: 9px 25px;
-  background-color: rgba(0,136,169, 1);
+  background-color: #6c757d;
   border: none;
   border-radius: 50px;
   cursor: pointer;
@@ -118,7 +126,7 @@ form{
   top: 50%;
   left: 50%;
   z-index: 1;
-  background: #0d0e0d;
+  background: #6c757d;
   width: 360px;
   margin: 0 auto 100px;
   margin-top: 50px;
