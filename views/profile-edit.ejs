@@ -42,9 +42,16 @@
                         <div class="col-md-12"><label class="labels">University</label><input type="text" class="form-control" placeholder="University" value="<%=college.name.stringValue%>"></div>
                         <div class="col-md-12"><label class="labels">Major</label><input type="text" class="form-control" placeholder="Major" value="<%=college.major.stringValue%>"></div>
                         
-                        <div class="col-md-12"><label class="labels">Social Media</label><input type="text" class="form-control" placeholder="Facebook" value="<%=social.facebook.stringValue%>"></div>
-                        <div class="col-md-12"><label class="labels"></label><input type="link" class="form-control" placeholder="Twitter" value="<%=social.twitter.stringValue%>"></div>
-                        <div class="col-md-12"><label class="labels"></label><input type="text" class="form-control" placeholder="Linkedin" value="<%=social.linkedin.stringValue%>"></div>
+                        <% if(social){ %>
+                            <div class="col-md-12"><label class="labels">Social Media</label><input type="text" class="form-control" placeholder="Facebook" value="<%=social.facebook.stringValue%>"></div>
+                            <div class="col-md-12"><label class="labels"></label><input type="link" class="form-control" placeholder="Twitter" value="<%=social.twitter.stringValue%>"></div>
+                            <div class="col-md-12"><label class="labels"></label><input type="text" class="form-control" placeholder="Linkedin" value="<%=social.linkedin.stringValue%>"></div>
+                          <% } else{ %>  
+                            <div class="col-md-12"><label class="labels">Social Media</label><input type="text" class="form-control" placeholder="Facebook" value=""></div>
+                            <div class="col-md-12"><label class="labels"></label><input type="link" class="form-control" placeholder="Twitter" value=""></div>
+                            <div class="col-md-12"><label class="labels"></label><input type="text" class="form-control" placeholder="Linkedin" value=""></div>
+                          
+                            <% } %>
                       </div>
                     <!-- <div class="row mt-3">
                         <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value=""></div>
