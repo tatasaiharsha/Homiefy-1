@@ -3,7 +3,7 @@ const firebase = require('firebase/app')
 const config = require('./config')
 
 
-var serviceAccount = require("./serviceAccountKey.json");
+var serviceAccount = config.serviceAccountKey
 
 
 admin.initializeApp({
