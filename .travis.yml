@@ -4,11 +4,10 @@ node_js:
   - 10.19.0
 
 before_script:
-  - CI=false npm run build 
   - npm install
-  - npm test
 
 script:
+  - npm test
   - npm start
 
   
