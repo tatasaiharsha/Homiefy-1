@@ -21,5 +21,9 @@ before_install:
   # - docker run carlad/sinatra /bin/sh -c "cd /root/sinatra; bundle exec rake test"
 
 script:
-  - npm run test
+  # - npm run test
   - npm run start
+
+after_script:
+  - docker stop homiefy-app-container
+

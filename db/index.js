@@ -49,4 +49,4 @@ async function dropDB(){
       await collection.deleteOne()
     }
 }
-module.exports = {connect, close, mongoose, dropDB};
+module.exports = {connect, close, dropDB};

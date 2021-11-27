@@ -36,10 +36,10 @@
         <div class="a"><button class="btn-primary" id="show-login1">Login | Register</button></div>
 
     </header>
-    <div class="messages">
+  <!--  <div class="messages">
         <%= msg %>
-            <!-- <%= typeof msg!='undefined' ? msg : '' %> -->
-    </div>
+             <%= typeof msg!='undefined' ? msg : '' %>
+    </div> -->
 
     <div class="card position-absolute " style="width: 18rem;">
         <img src="../img/background.jpg" class="card-img-top" alt="...">
@@ -98,7 +98,7 @@
 
     <div class="loginForm ">
         <!-- <form method="POST" action="https://homiefy-group-a.herokuapp.com/login" enctype="multipart/form-data"> -->
-        <form method="POST" action="/api/auth/login" enctype="multipart/form-data">
+        <form method="POST" action="/api/auth/login" Content-Type="application/json">
             <!-- <h3>Sign Up</h3> -->
 
 
