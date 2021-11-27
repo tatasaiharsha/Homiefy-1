@@ -16,7 +16,7 @@ services:
 
 before_install:
   - docker build -t homiefy-app-image .
-  - docker run -p 8001:8001 -d --name homiefy-app-container
+  - docker run -p 8001:8001 -d --name homiefy-app-container homiefy-app-image
   - docker ps -a
   # - docker run carlad/sinatra /bin/sh -c "cd /root/sinatra; bundle exec rake test"
 
