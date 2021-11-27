@@ -1,3 +1,4 @@
+[![Build Status](https://app.travis-ci.com/spartanHarvey/Homiefy.svg?branch=main)](https://app.travis-ci.com/spartanHarvey/Homiefy)
 # Homiefy
 
 My project consists of building a website where college students will use to find roommates, rate, and review their experiences. The goal is to help college student have more information about their potential roommate and avoid shocks in the future.

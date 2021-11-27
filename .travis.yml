@@ -3,11 +3,23 @@ language: node_js
 node_js:
   - 10.19.0
 
-before_script:
-  - npm install
+# before_script:
+#   - npm install
 
-script:
-  - npm test
-  - npm start
+# script:
+#   - npm test
+#   - npm start
 
   
+services:
+  - docker
+
+before_install:
+  - docker build -t homiefy-app-image.
+  - docker run -p 8001:8001 -d --name homiefy-app-container"
+  - docker ps -a
+  - docker run carlad/sinatra /bin/sh -c "cd /root/sinatra; bundle exec rake test"
+
+# script:
+#   - npm run test
+#   - npm run start
