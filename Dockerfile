@@ -1,4 +1,4 @@
-From node:10
+FROM node:10
 
 WORKDIR /homiefy
 
@@ -10,5 +10,4 @@ COPY . ./
 
 EXPOSE 8001
 
-CMD ["node","server.js"]
 
