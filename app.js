@@ -100,10 +100,10 @@ app.get('/', cors(), async (req,res) => {
 
     res.render('index.ejs',{"msg":"mes"})
 })
-app.get('/profile_new', cors(), async (req,res) => {
+// app.get('/profile_new', cors(), async (req,res) => {
 
-    res.render('profile_new.ejs',{"msg":"mes"})
-})
+//     res.render('profile_new.ejs',{"msg":"mes"})
+// })
 app.use('/api/auth',cors(),authRoute);
 app.use('/api/users',cors(),usersRoute);
 app.use('/api/posts',cors(),postsRoute);
