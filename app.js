@@ -55,6 +55,7 @@ app.get('/', cors(), async (req,res) => {
 app.use('/api/auth',cors(),authRoute);
 app.use('/api/users',cors(),usersRoute);
 app.use('/api/posts',cors(),postsRoute);
+
 // app.use('/api/posts',cors(),commentsRoute);
 
 module.exports = app;
