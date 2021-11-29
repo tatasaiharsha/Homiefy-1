@@ -14,8 +14,9 @@ const authRoute = require('./routes/auth');
 const postsRoute = require('./routes/posts');
 const commentsRoute = require('./routes/comments');
 const MongoStore = require('connect-mongo')(session);
-
-
+const User = require('./db/models/User')
+const Post = require('./db/models/Post')
+const Comment = require('./db/models/Comment')
 
 
 app.use(session({
@@ -51,6 +52,34 @@ app.set('view engine', 'ejs')
 app.get('/', cors(), async (req,res) => {
 
     res.render('index.ejs',{"msg":"mes"})
+})
+
+
+app.get('/home/:id', cors(), async (req,res) => {
+
+    
+    try{
+        // const user = await User.findOne({_id:req.session.currentUser._id});
+        const user = await User.findOne({_id:req.params.id});  //for test modo change params to currentuser
+        const post = await Post.find({whoPosted:req.params.id});  //for test modo change params to currentuser
+        // const comment = await Comment.find({whoPosted:req.params.id});  //for test modo change params to currentuser
+
+        if(user) {
+            
+            // if(user._id == req.params.id) res.status(200).send(user);
+            console.log(post)
+            res.render('home.ejs', {user:user, posts:post})
+            
+        }
+        else res.status(404).send({"error":'Account no longer exist'})
+       
+    }catch(err){
+
+        res.send(err);
+    }
+    
+  
+    // res.render('home.ejs',{user:})
 })
 app.use('/api/auth',cors(),authRoute);
 app.use('/api/users',cors(),usersRoute);

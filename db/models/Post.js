@@ -6,6 +6,7 @@ const PostSchema = new Schema({
 
     title: { type: String, required:true},
     body: { type: String,required:true},
+    // image: {type: Image },
     comments: [{ type:mongoose.SchemaTypes.ObjectId, ref:'Comment',default:[], required:false}],
     likes: { type: Array,of:mongoose.SchemaTypes.ObjectId,default:[]},
     whoPosted: {type:mongoose.SchemaTypes.ObjectId, required: true},

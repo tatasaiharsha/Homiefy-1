@@ -1,22 +1,26 @@
 const router = require('express').Router()
 const User = require('../db/models/User')
 const bcrypt = require('bcryptjs');
-
+const Post = require('../db/models/Post')
 
 router.get('/profile/:id', async(req,res)=>{
 
 
     // if (!req.session.currentUser){ return res.send('redirect to log in')};
+    // if (!req.session.user){ return res.redirect('index')};
     // if (!req.params.id){ return res.send('redirect to log in')};
     
    
     try{
         // const user = await User.findOne({_id:req.session.currentUser._id});
         const user = await User.findOne({_id:req.params.id});  //for test modo change params to currentuser
+        const post = await Post.find({whoPosted:req.params.id});  //for test modo change params to currentuser
 
         if(user) {
             
-            if(user._id == req.params.id) res.status(200).send(user);
+            // if(user._id == req.params.id) res.status(200).send(user);
+            console.log(post)
+            res.render('profile.ejs', {user:req.session.currentUser, posts:post})
             
         }
         else res.status(404).send({"error":'Account no longer exist'})

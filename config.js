@@ -17,7 +17,7 @@ assert(PORT, 'PORT is required');
 
 module.exports = {
 
-    port: PORT || env.process.PORT,
+    port: PORT,
     host: HOST,
     url: HOST_URL,
     database_url: DATABASE_URL,

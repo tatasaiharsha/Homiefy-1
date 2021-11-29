@@ -67,9 +67,9 @@ router.post('/login', async(req,res,next)=>{
                 req.session['currentUser'] = user; 
                 
                 // req.session.save()
-                res.status(200).send({"msg":"logged in"});
+                // res.status(200).send({"msg":"logged in"});
                 // res.status(200).send(req.session);
-                // res.redirect(`../users/profile/${user._id}`);
+                res.redirect(`../users/profile/${user._id}`);
             }
         else{
             res.status(400).send({"error":'wrong password'});
