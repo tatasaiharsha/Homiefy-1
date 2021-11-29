@@ -4,17 +4,22 @@ const bcrypt = require('bcryptjs');
 
 
 router.get('/profile/:id', async(req,res)=>{
+
+
     // if (!req.session.currentUser){ return res.send('redirect to log in')};
+    // if (!req.params.id){ return res.send('redirect to log in')};
     
    
     try{
-        const user = await User.findOne({_id:req.params.id});
+        // const user = await User.findOne({_id:req.session.currentUser._id});
+        const user = await User.findOne({_id:req.params.id});  //for test modo change params to currentuser
+
         if(user) {
             
             if(user._id == req.params.id) res.status(200).send(user);
             
         }
-        else res.status(404).send('Account no longer exist')
+        else res.status(404).send({"error":'Account no longer exist'})
        
     }catch(err){
 

@@ -2,9 +2,6 @@ const router = require('express').Router()
 const User = require('../db/models/User')
 const bcrypt = require('bcryptjs');
 
-// const mongoose = require('mongoose');
-
-
 
 //register route
 router.post('/register', async (req,res)=>{
@@ -24,12 +21,12 @@ router.post('/register', async (req,res)=>{
 
     try{
         
-        // req.session['newUser'] = newUser.email;
+        req.session['currentUser'] = newUser;
         newUser.password = await bcrypt.hash(newUser.password, 10);  
         newUser.save();
         res.status(201).send(newUser);
-        //res.redirect('/profile')
-        // res.redirect('/profile')
+        // res.redirect(`../users/profile/${newUser._id}`);
+        
     }catch(err){
 
        res.status(500).send(err)
@@ -43,7 +40,8 @@ router.post('/register', async (req,res)=>{
 
 
 router.post('/login', async(req,res,next)=>{
-
+    // 
+    // if(req.session.currentUser){ return res.redirect(`../users/profile/${req.session.currentUser._id}`)}
     const email = req.body.email;
     const password = req.body.password;
 
@@ -51,31 +49,7 @@ router.post('/login', async(req,res,next)=>{
 
 
     const user = await User.findOne({email:email});
-    // req.session['currentUser'] = user._id;
-    // req.session.save((err)=>{
-
-    //     if(!err) console.log(err); return;
-
-
-        // res.redirect(`../users/profile/${user._id}`);
-
-
-    // })
-    // console.log(req.session.id)
-    // res.send(req.session)
-
-    // return new Promise((resolve, reject) => {
-    //     req.session.save((err) => {      
-    //       // redirect home
-    //       if (err) {
-    //         reject(err);
-    //       }
-    //       resolve(res.redirect(`../users/profile/${user._id}`));
-    //     })
-    //   });
   
- 
-    // // next();
     if(!user){
         res.status(404).send({"error":'account no found'});
         return;
@@ -83,18 +57,6 @@ router.post('/login', async(req,res,next)=>{
     
     }
     
-    // if(req.session.authenticated){
-    //     req.session['currentUser'] = user._id; 
-
-    //     res.send(req.session)
-    // }
-    // else{
-    //     req.session.authenticated = true;
-    //     req.session.save()
-
-    //     // res.send(req.session)
-    // }
- 
   
     try{
         const validPassword = await bcrypt.compare(password, user.password)
@@ -102,10 +64,11 @@ router.post('/login', async(req,res,next)=>{
 
             if(validPassword) {
                 
-                // req.session.currentUser = user._id; 
-
+                req.session['currentUser'] = user; 
+                
                 // req.session.save()
                 res.status(200).send({"msg":"logged in"});
+                // res.status(200).send(req.session);
                 // res.redirect(`../users/profile/${user._id}`);
             }
         else{
