@@ -25,19 +25,29 @@ const UserSchema = new Schema({
         }
     },
     socialMediaLinks:{
-        type:Map,
-        of:String,
-        name: {
+        type:Object,
+        facebook: {
             type:String
         },
-        year:{
+        twitter:{
+            type:String
+        },
+        linkedin:{
+            type:String
+        },
+        instagram:{
             type:String
         }
     },
-    following:{type: Array, default:[]},
-    followers:{type: Array, default:[]},
-    // posts: {}
-    // bio: { type: String, match: /[a-z]/ },
+    accountConfig:{
+        type:Object,
+        isActive: {
+            type:String
+        },
+        isVisiable:{
+            type:String
+        }
+    },
     date: { type: Date, default: Date.now },
    
 
