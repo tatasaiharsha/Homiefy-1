@@ -6,6 +6,7 @@ const chaiParam = require('chai-param').param;
 // console.log(process.env.NODE_ENV)
 const app = require('../app');
 const conn = require('../db/index')
+var Cookies;
 
 describe("Testing RestApi ", () => {
     let userId = '';
@@ -59,8 +60,9 @@ describe("Testing RestApi ", () => {
             expect(body).to.contain.property('date')
             expect(body).to.contain.property('following')
             expect(body).to.contain.property('followers')
-            expect(res.statusCode).to.equal(201);
-
+            expect(res.statusCode).to.equal(201)
+            
+            Cookies = res.headers['set-cookie'].pop().split(';')[0];
 
             done();
         })
@@ -147,6 +149,10 @@ describe("Testing RestApi ", () => {
             expect(res.statusCode).to.equal(200);
             expect(body).to.contain.property('msg')
 
+            Cookies = res.headers['set-cookie'].pop().split(';')[0];  //setting user session
+
+            // console.log(Cookies)
+
 
             done();
         })
@@ -219,12 +225,12 @@ describe("Testing RestApi ", () => {
         request(app)
         .get(`/api/users/profile/${userId}`)
         .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
         .buffer(true)
         .expect('Content-Type', /json/)
         .then((res)=>{
             const body = res.body;
             const header= res.req._header;
-
             expect(header).to.include(userId)
             expect(body).to.contain.property('_id')
             expect(body).to.contain.property('firstName')
@@ -252,9 +258,10 @@ describe("Testing RestApi ", () => {
         }
 
         request(app)
-        .put(`/api/users/profile/${userId}`)
+        .post(`/api/users/profile-edit/${userId}`)
         .send(user)
         .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
         .buffer(true)
         .expect('Content-Type', /json/)
         .then((res)=>{
@@ -279,9 +286,9 @@ describe("Testing RestApi ", () => {
 
 
         request(app)
-        .put(`/api/users/profile/${userId}`)
-        .send({})
+        .post(`/api/users/profile-edit/${userId}`)
         .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
         .buffer(true)
         .expect('Content-Type', /json/)
         .then((res)=>{
@@ -309,6 +316,7 @@ describe("Testing RestApi ", () => {
         request(app)
         .delete(`/api/users/profile/${userId}`)
         .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
         .buffer(true)
         .expect('Content-Type', /json/)
         .then((res)=>{
@@ -342,6 +350,7 @@ describe("Testing RestApi ", () => {
         .post(`/api/posts/post/${userId}`)
         .send(post)
         .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
         .buffer(true)
         .expect('Content-Type', /json/)
         .then((res)=>{
@@ -359,7 +368,6 @@ describe("Testing RestApi ", () => {
             expect(body.body).to.be.equal(post.body);
             expect(body.title).to.be.equal(post.title);
             expect(body.whoPosted).to.be.equal(post.whoPosted);
-            expect(body.comments).to.eql([]);
             expect(body.likes).to.eql([]);
 
 
@@ -371,13 +379,14 @@ describe("Testing RestApi ", () => {
         
     })
 
-    it('should return no empty post', (done)=>{
+    it('should return empty post and failed to update post', (done)=>{
 
 
         request(app)
         .post(`/api/posts/post/${userId}`)
         .send()
         .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
         .buffer(true)
         .expect('Content-Type', /json/)
         .then((res)=>{
@@ -396,7 +405,7 @@ describe("Testing RestApi ", () => {
         
     })
 
-    it('should return no empty fields', (done)=>{
+    it('should fail to update a post ', (done)=>{
 
         
         const post = {
@@ -406,9 +415,10 @@ describe("Testing RestApi ", () => {
     
         }
         request(app)
-        .put(`/api/posts/post/61a01f6def34871efb50ae14/${postId}`)
+        .post(`/api/posts/post/61a01f6def34871efb50ae14/${postId}`)
         .send(post)
         .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
         .buffer(true)
         .expect('Content-Type', /json/)
         .then((res)=>{
@@ -427,7 +437,7 @@ describe("Testing RestApi ", () => {
         
     })
 
-    it('should return post no found due to invalid postId', (done)=>{
+    it('should return post no found due to invalid post Id', (done)=>{
 
         const post = {
             whoPosted: userId,
@@ -436,9 +446,10 @@ describe("Testing RestApi ", () => {
     
         }
         request(app)
-        .put(`/api/posts/post/${userId}/61a01f6def34871efb50ae14`)
+        .post(`/api/posts/post/${userId}/61a01f6def34871efb50ae14`)
         .send(post)
         .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
         .buffer(true)
         .expect('Content-Type', /json/)
         .then((res)=>{
@@ -468,9 +479,10 @@ describe("Testing RestApi ", () => {
         }
 
         request(app)
-        .put(`/api/posts/post/${userId}/${postId}`)
+        .post(`/api/posts/post/${userId}/${postId}`)
         .send(post)
         .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
         .buffer(true)
         .expect('Content-Type', /json/)
         .then((res)=>{
@@ -491,7 +503,6 @@ describe("Testing RestApi ", () => {
             expect(body.body).to.be.equal(post.body);
             expect(body.title).to.be.equal(post.title);
             expect(body.whoPosted).to.be.equal(post.whoPosted);
-            expect(body.comments).to.eql([]);
             expect(body.likes).to.eql([]);
 
 
@@ -509,6 +520,7 @@ describe("Testing RestApi ", () => {
         request(app)
         .delete(`/api/posts/post/61a01f6def34871efb50ae14/${postId}`)
         .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
         .buffer(true)
         .expect('Content-Type', /json/)
         .then((res)=>{
@@ -536,6 +548,7 @@ describe("Testing RestApi ", () => {
         request(app)
         .delete(`/api/posts/post/${userId}/${postId}`)
         .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
         .buffer(true)
         .expect('Content-Type', /json/)
         .then((res)=>{
@@ -558,11 +571,12 @@ describe("Testing RestApi ", () => {
         
     })
 
-    it('shoudl return post no found due to being deleted', (done)=>{
+    it('should return post no found due to being deleted', (done)=>{
 
         request(app)
         .delete(`/api/posts/post/${userId}/${postId}`)
         .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
         .buffer(true)
         .expect('Content-Type', /json/)
         .then((res)=>{

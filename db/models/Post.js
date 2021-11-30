@@ -7,9 +7,9 @@ const PostSchema = new Schema({
     title: { type: String, required:true},
     body: { type: String,required:true},
     // image: {type: Image },
-    comments: [{ type:mongoose.SchemaTypes.ObjectId, ref:'Comment',default:[], required:false}],
+    comments: { type:mongoose.SchemaTypes.ObjectId, required:false,ref:'Comment'},
     likes: { type: Array,of:mongoose.SchemaTypes.ObjectId,default:[]},
-    whoPosted: {type:mongoose.SchemaTypes.ObjectId, required: true},
+    whoPosted: {type:mongoose.SchemaTypes.ObjectId, required: true, ref: 'User'},
     date: { type: Date, default: Date.now }
    
 

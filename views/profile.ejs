@@ -29,7 +29,44 @@
   </ul>
    
 </div> -->
-  <%- include('./navbar')%>
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light"> <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="navbar-toggler-icon"></span> </button> <a class="navbar-brand" href="/">Homiefy</a>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="navbar-nav">
+                        <!-- <li class="nav-item active"> <a class="nav-link" href="#">HOME <span class="sr-only">(current)</span></a> </li> -->
+                    </ul>
+                    <form class="form-inline"> <input class="form-control mr-sm-2" type="text" /> <button class="btn btn-primary my-2 my-sm-0" type="submit"> Search </button> </form>
+                    
+                    <ul class="navbar-nav ml-md-auto">
+                      <li class="nav-item dropdown"> 
+                        <div class="dropdown">
+                          
+                          <div class="profile"> 
+                            
+                            <% if(typeof currentuser.profilePicture != 'undefined'){ %>
+                              <img class="drop-btn" src="<%=currentuser.profilePicture%>">
+                              
+                            <% } else{ %>  
+                              <img class="drop-btn" width="30px" src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png">
+                           <% } %>
+                              <div class="dropdown-content">
+                                  <ul>
+                                      <li><i class='bx bx-user'></i><span><a href="/api/users/profile/<%=currentuser._id%>">Profile</a></span></li>
+                                      <li><i class='bx bx-cog'></i><span><a href="/api/users/profile-edit/<%=currentuser._id%>">Settings</a></span></li>
+                                      <li><i class='bx bx-log-in-circle'></i><span><a href="/">Logout</a></span></li>
+                                  </ul>
+                              </div>
+                          </div>
+                        </div>
+                      </li>                    
+                  </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
     
     <div class="container">
         <div class="main-body">
@@ -51,7 +88,7 @@
                           <h4><%=user.firstName%></h4>
 
                           <% if(typeof user.college != 'undefined'){ %>
-                            <p class="text-secondary mb-1"><%=college.year.stringValue %></p>
+                            <p class="text-secondary mb-1"><%=user.college.name %></p>
                             
                           <% } else{ %>  
                             <p class="text-secondary mb-1">empty</p>
@@ -59,7 +96,14 @@
                           <br/>
 
                           <div class="col-sm-12">
-                            <a class="btn btn-info btn-lg " target="__blank" href="http://localhost:8001/profile/edit">Edit</a>
+
+                            <% if (user == currentuser){ %>
+                              <a class="btn btn-info btn-lg " target="__blank" href="/api/users/profile-edit/<%=currentuser._id%>">Edit</a>
+                            <% } else{ %>  
+                              <a class="btn btn-info btn-lg " target="__blank" href="">Review</a>
+                           <% } %>
+                            
+                            <!-- <a class="btn btn-info btn-lg " target="__blank" href="http://localhost:8001/profile/edit">Edit</a> -->
                           </div>
                           <div class="row">
                           </div>
@@ -73,7 +117,7 @@
                     <ul class="list-group list-group-flush">
                       <li class="list-group-item d-flex justify-content-center align-items-center flex-wrap">
                         <% if(typeof user.college != 'undefined'){ %>
-                            <h6 class="mb-0"><%=college.name.stringValue%></h6>
+                            <h6 class="mb-0"><%=user.college.name%></h6>
                           <% } else{ %>  
                             <h6 class="mb-0">empty</h6>
 
@@ -81,8 +125,8 @@
                       </li>
                       <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">                        
                           <% if(typeof user.college != 'undefined'){ %>
-                            <img src="https://logo.clearbit.com/<%=college.url.stringValue%>" width="30px">
-                            <span class="text-secondary"><a href="https://www.<%=college.url.stringValue%>">https://www.<%=college.url.stringValue%></a></span>
+                            <img src="https://logo.clearbit.com/<%=user.college.url%>" width="30px">
+                            <span class="text-secondary"><a href="https://www.<%=user.college.name%>">https://www.<%=user.college.url%></a></span>
                           <% } else{ %> 
                             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Paying_for_College_%2889572%29_-_The_Noun_Project.svg" width="30px">
 
@@ -168,11 +212,11 @@
                           <h6 class="mb-0">Phone</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                          (239) 816-9029
+                          <%=user.phoneNumber%>
                         </div>
                       </div>
                       <hr>
-                      <div class="row">
+                      <!-- <div class="row">
                         <div class="col-sm-3">
                           <h6 class="mb-0">Mobile</h6>
                         </div>
@@ -189,7 +233,7 @@
                           Bay Area, San Francisco, CA
                         </div>
                       </div>
-                      <hr>
+                      <hr> -->
                       <!-- <div class="row">
                         <div class="col-sm-12">
                           <a class="btn btn-info " target="__blank" href="http://localhost:8001/profile/edit">Edit</a>

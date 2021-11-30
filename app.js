@@ -16,7 +16,6 @@ const commentsRoute = require('./routes/comments');
 const MongoStore = require('connect-mongo')(session);
 const User = require('./db/models/User')
 const Post = require('./db/models/Post')
-const Comment = require('./db/models/Comment')
 
 
 app.use(session({
@@ -34,7 +33,7 @@ app.use(session({
 
 
 // app.use(multer({dest:'./uploads/'}).single('profilePicture'));
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // app.use(fileUpload());
 app.use(express.static(__dirname + '/public'))
@@ -50,40 +49,86 @@ app.set('view engine', 'ejs')
 
 //routes
 app.get('/', cors(), async (req,res) => {
-
-    res.render('index.ejs',{"msg":"mes"})
+    if(req.session.hasOwnProperty('currentUser')){  return res.redirect(`/home/${req.session.currentUser._id}`);}
+    res.render('index.ejs')
 })
 
 
 app.get('/home/:id', cors(), async (req,res) => {
 
+    if(!req.session.currentUser){return res.redirect('/');}
+    const user = await User.findOne({_id:req.params.id});  //for test modo change params to currentuser
+    const post = await Post.find(
+        {
+            whoPosted:{$ne:req.session.currentUser._id}
     
-    try{
-        // const user = await User.findOne({_id:req.session.currentUser._id});
-        const user = await User.findOne({_id:req.params.id});  //for test modo change params to currentuser
-        const post = await Post.find({whoPosted:req.params.id});  //for test modo change params to currentuser
-        // const comment = await Comment.find({whoPosted:req.params.id});  //for test modo change params to currentuser
+    }).populate("whoPosted")
 
-        if(user) {
-            
-            // if(user._id == req.params.id) res.status(200).send(user);
-            console.log(post)
-            res.render('home.ejs', {user:user, posts:post})
-            
-        }
-        else res.status(404).send({"error":'Account no longer exist'})
-       
-    }catch(err){
 
-        res.send(err);
-    }
-    
-  
-    // res.render('home.ejs',{user:})
+    const searchedInUser = await User.find(
+        {
+           $and: [
+                    { $or: 
+                            [
+                                {firstName: {$eq : req.body.keyword}}, 
+                                {lastName: {$eq : req.body.keyword}},
+                                {'college.name':  { $eq:req.body.keyword }},
+                                {'college.major':  { $eq: req.body.keyword }}
+                            ] 
+                    }
+                ]
+   }); 
+    const searchedInPost = await Post.find(
+      {
+            $and: [
+                        { $or: 
+                                [
+                                    {title: { '$regex' : `${req.body.keyword}`, $options: '-i' }}, 
+                                    {body: { '$regex' : `${req.body.keyword}`, $options: '-i' }}
+                                
+                                ] 
+                        }
+                    ]
+
+    }).populate("whoPosted") 
+
+   console.log(searchedInPost)
+   console.log(searchedInUser)
+    res.render('home.ejs',{user:user,posts:post,currentuser:req.session.currentUser})
 })
+
+app.post('/home/:id/:keyword', cors(), async(req,res) =>{
+
+    if(!req.session.currentUser){return res.redirect('/');}
+
+    // const searched = await User.find(
+    //      {
+    //         // _id:{$ne:req.session.currentUser._id}
+    //         $and: [
+    //             { $or: [{firstName:  { $in: req.params.keyword }}, {lastName:  { $in: req.params.keyword }}] }
+    //             ,
+    //             { $or: [{'college.name':  { $in: req.params.keyword }}, {'college.major':  { $in: req.params.keyword }},] }
+    //         ]
+    
+    // });  
+    // const post = await Post.find(
+    //     {
+    //         whoPosted:{$ne:req.session.currentUser._id}
+    
+    // }).populate("whoPosted")
+
+})
+app.get('/about', cors(), async (req,res) => {
+
+    res.render('about.ejs')
+})
+
+
+
+
 app.use('/api/auth',cors(),authRoute);
 app.use('/api/users',cors(),usersRoute);
 app.use('/api/posts',cors(),postsRoute);
-// app.use('/api/posts',cors(),commentsRoute);
+app.use('/api/comments',cors(),commentsRoute);
 
 module.exports = app;

@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Comment} = require('../db/models/Comment')
+const Comment = require('../db/models/Comment')
 const Post = require('../db/models/Post')
 const User = require('../db/models/User')
 
@@ -8,10 +8,14 @@ const User = require('../db/models/User')
 
 router.post('/comment/:id/:postid', async(req,res) => {
 
+
+    // if (!req.session.currentUser){ return res.redirect('/')};
     if(!req.body) {res.status().send({"error":"empty comment"}); return;}
+    
     let newComment =  new Comment({
         text: req.body.text,
-        whoCommented: req.params.id
+        whoCommented: req.params.id,
+        post: req.params.postid
 
     })
     
@@ -24,7 +28,8 @@ router.post('/comment/:id/:postid', async(req,res) => {
         newComment.save()
         post.comments.push(newComment)
         post.save();
-        res.status(201).send(post)
+        // res.status(201).send(post)
+        res.status(201).redirect(`/api/posts/post/${req.params.postid}`)
     }
     catch(err){
 
