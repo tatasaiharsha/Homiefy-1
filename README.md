@@ -19,4 +19,4 @@ On this platform users must register with a valid .edu email to have access to a
 * run `cd Homiefy`
 * You need to have *NodeJS* installed in your machine then run `npm install` to download all of the dependecies 
 * Then update `.env` with `firebase` config 
-* Now you can run `npm start` and it should launch your applicartion on port `8001`
+* Now you can run `npm start` and it should launch your application on port `8001`
