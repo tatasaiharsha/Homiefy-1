@@ -65,6 +65,15 @@ app.get('/home/:id', cors(), async (req,res) => {
     }).populate("whoPosted")
 
 
+    
+
+    res.render('home.ejs',{user:user,posts:post,currentuser:req.session.currentUser})
+})
+
+app.post('/home/:id/:keyword', cors(), async(req,res) =>{
+
+    if(!req.session.currentUser){return res.redirect('/');}
+
     const searchedInUser = await User.find(
         {
            $and: [
@@ -92,32 +101,11 @@ app.get('/home/:id', cors(), async (req,res) => {
 
     }).populate("whoPosted") 
 
-   console.log(searchedInPost)
-   console.log(searchedInUser)
-    res.render('home.ejs',{user:user,posts:post,currentuser:req.session.currentUser})
-})
-
-app.post('/home/:id/:keyword', cors(), async(req,res) =>{
-
-    if(!req.session.currentUser){return res.redirect('/');}
-
-    // const searched = await User.find(
-    //      {
-    //         // _id:{$ne:req.session.currentUser._id}
-    //         $and: [
-    //             { $or: [{firstName:  { $in: req.params.keyword }}, {lastName:  { $in: req.params.keyword }}] }
-    //             ,
-    //             { $or: [{'college.name':  { $in: req.params.keyword }}, {'college.major':  { $in: req.params.keyword }},] }
-    //         ]
-    
-    // });  
-    // const post = await Post.find(
-    //     {
-    //         whoPosted:{$ne:req.session.currentUser._id}
-    
-    // }).populate("whoPosted")
+    return res.redirect(200,'/',searched={searchedInPost,searchedInUser})
 
 })
+
+
 app.get('/about', cors(), async (req,res) => {
 
     res.render('about.ejs')
