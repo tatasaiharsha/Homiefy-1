@@ -1,7 +1,7 @@
 [![Build Status](https://app.travis-ci.com/spartanHarvey/Homiefy.svg?branch=main)](https://app.travis-ci.com/spartanHarvey/Homiefy)
 # Homiefy
 
-My project consists of building a website where college students will use to find roommates, rate, and review their experiences. The goal is to help college student have more information about their potential roommate and avoid shocks in the future.
+My project consists of building a website where college students will use to find roommates, rate, and review their experiences. The goal is to help college student have more information about their potential roommate and avoid shocks in the future...
 
 On this platform users must register with a valid .edu email to have access to all available features. Users will also be able to use the website to sell/rent college related items such as books and calculators.
 
