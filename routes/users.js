@@ -98,7 +98,6 @@ router.get('/profile-edit/:id', async (req,res) => {
 router.post('/profile-edit/:id', async(req,res)=>{
     
 
-    console.log(req.body)
     if(!req.session.currentUser){
         
         if(process.env.NODE_ENV === 'test') return res.status(403).send({"error":"Login first"});
