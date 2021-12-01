@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');;
-const fileUpload = require('express-fileupload');
+// const fileUpload = require('express-fileupload');
 const cors = require('cors')
 const cookieParser = require("cookie-parser");
 const session = require('express-session');
@@ -35,7 +35,7 @@ app.use(session({
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(fileUpload());
+// app.use(fileUpload());
 app.use(express.static(__dirname + '/public'))
 app.use(cors())
 app.use(cookieParser());

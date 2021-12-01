@@ -3,19 +3,9 @@ const User = require('../db/models/User')
 const bcrypt = require('bcryptjs');
 const Post = require('../db/models/Post')
 const Review = require('../db/models/Review')
-const multer = require("multer");
+const fileUpload = require('express-fileupload');
+// router.use(fileUpload());
 
-// router.use(multer({dest:'./uploads/'}).single('profilePicture'));
-
-var storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, './upload');
-    },
-    filename: function (req, file, cb) {
-        cb(null , file.originalname);
-    }
-});
-var upload = multer({ storage: storage });
 router.get('/profile/:id', async(req,res)=>{
 
 
@@ -87,35 +77,28 @@ router.get('/profile-edit/:id', async (req,res) => {
 
     if(!req.session.currentUser){
         if(process.env.NODE_ENV === 'test') return res.status().send({"error":"login first"})
-        res.redirect(401,'/',msg={"error":"login first"} )
+        res.redirect(401,'/')
     }
 
     try{
 
 
-        const currentuser = req.session.currentUser;
-        const user = await User.findOne({_id:currentuser._id});  //for test modo change params to currentuser
-        const post = await Post.find({whoPosted:currentuser._id});  //for test modo change params to currentuser
+        const user = await User.findOne({_id:req.session.currentUser._id});  //for test modo change params to currentuser
+        // const post = await Post.find({whoPosted:currentuser._id});  //for test modo change params to currentuser
     
+        console.log(user.socialMediaLinks.twitter)
         if(process.env.NODE_ENV === 'test') return res.status(200).send(user);
-        res.render('profile-edit.ejs',{user,currentuser, posts:post})
+        return res.render('profile-edit.ejs',{currentuser:user})
 
     }catch(err){
         res.status(500).send(err);
 
     }
 })
-//update user
 
-router.use(function (req, res, next) {
-    console.log(req.body); // JSON Object
-    next();
-});
-
-router.post('/profile-edit/:id',upload.single('profilePicture'), async(req,res)=>{
+router.post('/profile-edit/:id', async(req,res)=>{
     
-    console.log(req.files)
-    console.log(req.body)
+
     if(!req.session.currentUser){
         
         if(process.env.NODE_ENV === 'test') return res.status(403).send({"error":"Login first"});
@@ -152,7 +135,7 @@ router.post('/profile-edit/:id',upload.single('profilePicture'), async(req,res)=
         
         const user = await User.findByIdAndUpdate(req.params.id,{$set:req.body},{useFindAndModify: false,new: true});
         if(process.env.NODE_ENV === 'test') return res.status(200).send(user);
-        return res.redirect(`/profile-edit/${req.session.currentUser._id}`, msg={"success":"Profile updated"});
+        return res.redirect(`/profile/${req.session.currentUser._id}`);
 
     }catch(err){
 
