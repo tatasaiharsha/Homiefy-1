@@ -148,7 +148,6 @@ describe("Testing RestApi ", () => {
 
             Cookies = res.headers['set-cookie'].pop().split(';')[0];  //setting user session
 
-            // console.log(Cookies)
 
 
             done();

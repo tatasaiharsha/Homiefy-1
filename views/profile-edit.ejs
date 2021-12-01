@@ -33,7 +33,7 @@
                                 <% if(typeof currentuser.profilePicture != 'undefined'){ %>
     
                                     
-                                  <img class="drop-btn" src="<%-currentuser.profilePicture%>">
+                                  <img class="drop-btn" src="<%=currentuser.profilePicture%>">
                                   
                                 <% } else{ %>  
                                   <img class="drop-btn" width="30px" src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png">
@@ -56,7 +56,7 @@
     </div>
     
     <div class="container rounded bg-white mt-5 mb-5">
-        <form action="/api/users/profile-edit/<%=currentuser._id%>" enctype="multipart/form-data"  method="POST">
+        <form action="/api/users/profile-edit/<%=currentuser._id%>" enctype="application/json"  method="POST">
         <div class="row">
             <div class="col-md-3 border-right">
 
@@ -87,7 +87,7 @@
                         <div class="col-md-12"><label class="labels">University</label><input type="text" name="college.name" class="form-control" placeholder="University Name" value="<%=currentuser.college.name%>"></div>
                         <div class="col-md-12"><label class="labels">Major</label><input type="text" name="college.major" class="form-control" placeholder="Major" value="<%=currentuser.college.major%>"></div>
             
-                        <% if(typeof currentuser.social != 'undefined'){ %>
+                        <% if(typeof currentuser.socialMediaLinks != 'undefined'){ %>
                             <div class="col-md-12"><label class="labels">Social Media</label><input name="socialMediaLinks.facebook" type="text" class="form-control" placeholder="Facebook profile link" value="<%=currentuser.socialMediaLinks.facebook%>"></div>
                             <div class="col-md-12"><label class="labels"></label><input type="text" name="socialMediaLinks.linkedin" class="form-control" placeholder="Linkedin profile link" value="<%=currentuser.socialMediaLinks.linkedin%>"></div>
                             <div class="col-md-12"><label class="labels"></label><input type="link" name="socialMediaLinks.twitter" class="form-control" placeholder="Twitter profile link" value="<%=currentuser.socialMediaLinks.twitter%>"></div>

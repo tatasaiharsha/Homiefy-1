@@ -4,7 +4,6 @@ const bcrypt = require('bcryptjs');
 const Post = require('../db/models/Post')
 const Review = require('../db/models/Review')
 const fileUpload = require('express-fileupload');
-// router.use(fileUpload());
 
 router.get('/profile/:id', async(req,res)=>{
 
@@ -77,28 +76,29 @@ router.get('/profile-edit/:id', async (req,res) => {
 
     if(!req.session.currentUser){
         if(process.env.NODE_ENV === 'test') return res.status().send({"error":"login first"})
-        res.redirect(401,'/')
+        res.redirect(401,'/',msg={"error":"login first"} )
     }
 
     try{
 
 
+       
         const user = await User.findOne({_id:req.session.currentUser._id});  //for test modo change params to currentuser
-        // const post = await Post.find({whoPosted:currentuser._id});  //for test modo change params to currentuser
-    
-        console.log(user.socialMediaLinks.twitter)
+        req.session.currentUser = user;
         if(process.env.NODE_ENV === 'test') return res.status(200).send(user);
-        return res.render('profile-edit.ejs',{currentuser:user})
+        res.render('profile-edit.ejs',{currentuser:req.session.currentUser})
 
     }catch(err){
-        res.status(500).send(err);
+        res.status(500).send(err.message);
 
     }
 })
 
+
 router.post('/profile-edit/:id', async(req,res)=>{
     
 
+    console.log(req.body)
     if(!req.session.currentUser){
         
         if(process.env.NODE_ENV === 'test') return res.status(403).send({"error":"Login first"});
@@ -109,7 +109,7 @@ router.post('/profile-edit/:id', async(req,res)=>{
         
         if(process.env.NODE_ENV === 'test') return res.status(403).send({"error":"Need to login"})
 
-        res.redirect(401,`/profile-edit/${req.session.currentUser._id}`)
+        res.redirect(`/profile-edit/${req.session.currentUser._id}`)
     
     };
     
@@ -118,7 +118,7 @@ router.post('/profile-edit/:id', async(req,res)=>{
         if(process.env.NODE_ENV === 'test') return res.status(409).send({"error":"no empty fields"})
         return res.redirect(409,`/profile-edit/${req.session.currentUser}`,msg={"error":"no empty fields"})}
 
-    if(req.body.passwordd){
+    if(req.body.password){
         
         try{
             req.body.password = await bcrypt.hash(req.body.password, 10);  
@@ -135,7 +135,9 @@ router.post('/profile-edit/:id', async(req,res)=>{
         
         const user = await User.findByIdAndUpdate(req.params.id,{$set:req.body},{useFindAndModify: false,new: true});
         if(process.env.NODE_ENV === 'test') return res.status(200).send(user);
-        return res.redirect(`/profile/${req.session.currentUser._id}`);
+        
+        // return res.redirect(`users/profile/${req.session.currentUser._id}`);
+        res.redirect(`../profile-edit/${req.params.id}`)
 
     }catch(err){
 
