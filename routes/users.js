@@ -3,7 +3,19 @@ const User = require('../db/models/User')
 const bcrypt = require('bcryptjs');
 const Post = require('../db/models/Post')
 const Review = require('../db/models/Review')
+const multer = require("multer");
 
+// router.use(multer({dest:'./uploads/'}).single('profilePicture'));
+
+var storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './upload');
+    },
+    filename: function (req, file, cb) {
+        cb(null , file.originalname);
+    }
+});
+var upload = multer({ storage: storage });
 router.get('/profile/:id', async(req,res)=>{
 
 
@@ -95,9 +107,15 @@ router.get('/profile-edit/:id', async (req,res) => {
 })
 //update user
 
-router.post('/profile-edit/:id', async(req,res)=>{
-    
+router.use(function (req, res, next) {
+    console.log(req.body); // JSON Object
+    next();
+});
 
+router.post('/profile-edit/:id',upload.single('profilePicture'), async(req,res)=>{
+    
+    console.log(req.files)
+    console.log(req.body)
     if(!req.session.currentUser){
         
         if(process.env.NODE_ENV === 'test') return res.status(403).send({"error":"Login first"});
@@ -130,9 +148,11 @@ router.post('/profile-edit/:id', async(req,res)=>{
     }
     try{
 
+        if(!req.body.profilePicture){ delete req.body.profilePicture;} 
+        
         const user = await User.findByIdAndUpdate(req.params.id,{$set:req.body},{useFindAndModify: false,new: true});
         if(process.env.NODE_ENV === 'test') return res.status(200).send(user);
-        res.redirect(200,`/profile-edit/${req.session.currentUser._id}`, msg={"success":"Profile updated"});
+        return res.redirect(`/profile-edit/${req.session.currentUser._id}`, msg={"success":"Profile updated"});
 
     }catch(err){
 

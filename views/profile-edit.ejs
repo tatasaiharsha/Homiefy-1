@@ -30,10 +30,10 @@
                               
                               <div class="profile"> 
                                 
-                                <% if(typeof user.profilePicture != 'undefined'){ %>
+                                <% if(typeof currentuser.profilePicture != 'undefined' || currentuser.profilePicture ==''){ %>
     
                                     
-                                  <img class="drop-btn" src="<%=user.profilePicture%>">
+                                  <img class="drop-btn" src="<%=currentuser.profilePicture%>">
                                   
                                 <% } else{ %>  
                                   <img class="drop-btn" width="30px" src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png">
@@ -56,12 +56,12 @@
     </div>
     
     <div class="container rounded bg-white mt-5 mb-5">
-        <form action="/api/users/profile-edit/<%=currentuser._id%>" method="POST">
+        <form action="/api/users/profile-edit/<%=currentuser._id%>" enctype="multipart/form-data"  method="POST">
         <div class="row">
             <div class="col-md-3 border-right">
 
-                <% if(typeof user.profilePicture != 'undefined'){ %>
-                    <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="<%user.profilePicture%>"><span class="font-weight-bold"><%=user.firstName%></span><span class="text-black-50"><%=user.firstNam%></span><span> </span></div>
+                <% if(typeof currentuser.profilePicture != 'undefined'){ %>
+                    <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="<%=currentuser.profilePicture%>"><span class="font-weight-bold"><%=user.firstName%></span><span class="text-black-50"><%=user.firstNam%></span><span> </span></div>
                     
                   <% } else{ %>  
                     <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"><span class="font-weight-bold"><%=user.firstName%></span><span class="text-black-50"><%=user.firstNam%></span><span> </span></div>
@@ -81,30 +81,27 @@
                         <div class="col-md-6"><label class="labels">Last Name</label><input type="text" disabled="true"class="form-control" value="<%=user.lastName%>" placeholder="Last Name"></div>
                     </div>
                     <div class="row mt-3">
-                        <div class="col-md-12"><label class="labels">Email</label><input type="text"  disabled="true"class="form-control" placeholder="Email" value="<%=user.email%>"></div>
-                        <div class="col-md-12"><label class="labels">New Password</label><input type="password" class="form-control" placeholder="Password" value=""></div>
+                        <div class="col-md-12"><label class="labels">Email</label><input type="text"  disabled="true" name="email" class="form-control" placeholder="Email" value="<%=user.email%>"></div>
+                        <div class="col-md-12"><label class="labels">New Password</label><input type="password" name="password"class="form-control" placeholder="Password" value=""></div>
                         <div class="col-md-12"><label class="labels">Comfirm Password</label><input type="password" class="form-control" placeholder="Confirm Password" value=""></div>
                         <div class="col-md-12"><label class="labels">University</label><input type="text" name="college.name" class="form-control" placeholder="University Name" value="<%=user.college.name%>"></div>
-                        <div class="col-md-12"><label class="labels">Major</label><input type="text" class="form-control" placeholder="Major" value=""></div>
+                        <div class="col-md-12"><label class="labels">Major</label><input type="text" name="college.major" class="form-control" placeholder="Major" value=""></div>
             
                         <% if(typeof user.social != 'undefined'){ %>
-                            <div class="col-md-12"><label class="labels"></label><input type="text" class="form-control" placeholder="Linkedin profile link" value="<%=user.social.linkedin%>"></div>
-                            <div class="col-md-12"><label class="labels"></label><input type="link" class="form-control" placeholder="Twitter profile link" value="<%=user.social.twitter%>"></div>
-                            <div class="col-md-12"><label class="labels"></label><input type="text" class="form-control" placeholder="Instagram username""></div>
-                            <div class="col-md-12"><label class="labels">Social Media</label><input type="text" class="form-control" placeholder="Facebook profile link" value="<%=user.social.facebook%>"></div>
+                            <div class="col-md-12"><label class="labels">Social Media</label><input name="socialMediaLinks.facebook" type="text" class="form-control" placeholder="Facebook profile link" value="<%=currentuser.social.facebook%>"></div>
+                            <div class="col-md-12"><label class="labels"></label><input type="text" name="socialMediaLinks.linkedin" class="form-control" placeholder="Linkedin profile link" value="<%=currentuser.social.linkedin%>"></div>
+                            <div class="col-md-12"><label class="labels"></label><input type="link" name="socialMediaLinks.twitter" class="form-control" placeholder="Twitter profile link" value="<%=currentuser.social.twitter%>"></div>
+                            <div class="col-md-12"><label class="labels"></label><input type="text" name="socialMediaLinks.instagram" class="form-control" placeholder="Instagram username" value="<%=currentuser.social.instagram%>"></div>
 
                           <% } else{ %>  
-                            <div class="col-md-12"><label class="labels"></label><input type="text" class="form-control" placeholder="Linkedin profile link" value=""></div>
-                            <div class="col-md-12"><label class="labels"></label><input type="link" class="form-control" placeholder="Twitter username" value=""></div>
-                            <div class="col-md-12"><label class="labels"></label><input type="text" class="form-control" placeholder="Instagram username"></div>
-                            <div class="col-md-12"><label class="labels">Social Media</label><input type="text" class="form-control" placeholder="Facebook profile link" value=""></div>
+                            <div class="col-md-12"><label class="labels">Social Media</label><input name="socialMediaLinks.facebook" type="text" class="form-control" placeholder="Facebook profile link" value=""></div>
+                            <div class="col-md-12"><label class="labels"></label><input type="text" name="socialMediaLinks.linkedin" class="form-control" placeholder="Linkedin profile link" value=""></div>
+                            <div class="col-md-12"><label class="labels"></label><input type="link" name="socialMediaLinks.twitter" class="form-control" placeholder="Twitter username" value=""></div>
+                            <div class="col-md-12"><label class="labels"></label><input type="text" name="socialMediaLinks.instagram" class="form-control" placeholder="Instagram username"></div>
                           
                             <% } %>
                       </div>
-                    <!-- <div class="row mt-3">
-                        <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value=""></div>
-                        <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state"></div>
-                    </div> -->
+                   
                     <div class="mt-5 text-center"><button type="submit" class="btn btn-primary profile-button" type="button">Save Profile</button></div>
                 </div>
             </div>
