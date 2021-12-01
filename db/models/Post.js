@@ -9,8 +9,7 @@ const PostSchema = new Schema({
     // image: {type: Image },
     comments: { type:mongoose.SchemaTypes.ObjectId, required:false,ref:'Comment'},
     likes: { type: Array,of:mongoose.SchemaTypes.ObjectId,default:[]},
-    whoPosted: {type:mongoose.SchemaTypes.ObjectId, required: true, ref: 'User'},
-    date: { type: Date, default: Date.now }
+    whoPosted: {type:mongoose.SchemaTypes.ObjectId, required: true, ref: 'User'}
    
 
 },

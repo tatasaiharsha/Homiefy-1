@@ -2,22 +2,21 @@ const router = require('express').Router()
 const User = require('../db/models/User')
 const bcrypt = require('bcryptjs');
 const Post = require('../db/models/Post')
+const Review = require('../db/models/Review')
 
 router.get('/profile/:id', async(req,res)=>{
 
 
-    // if (!req.session.currentUser){ return res.send('redirect to log in')};
     if (!req.session.currentUser){ 
         if(process.env.NODE_ENV === 'test') return res.status(404).send({"error":"login first"});
         return res.redirect('/')};
-    // if (!req.params.id){ return res.send('redirect to log in')};
 
     if(req.session.currentUser._id == req.params.id){
 
         try{
-            // const user = await User.findOne({_id:req.session.currentUser._id});
             const user = await User.findOne({_id:req.session.currentUser._id});  //for test modo change params to currentuser
             const post = await Post.find({whoPosted:req.session.currentUser._id});  //for test modo change params to currentuser
+            const reviews = await Review.find({whoGotReviewed:req.session.currentUser._id});  //for test modo change params to currentuser
     
             if(user) {
                 
@@ -25,7 +24,7 @@ router.get('/profile/:id', async(req,res)=>{
 
                     if(user._id == req.params.id) return res.status(200).send(user);
                 }
-                res.render('profile.ejs', {user:req.session.currentUser,currentuser:req.session.currentUser, posts:post})
+                res.render('profile.ejs', {user:req.session.currentUser,currentuser:req.session.currentUser, posts:post,reviews})
                 
             }
             else {
@@ -45,12 +44,12 @@ router.get('/profile/:id', async(req,res)=>{
         try{
             const user = await User.findOne({_id:req.params.id});  //for test modo change params to currentuser
             const post = await Post.find({whoPosted:req.params.id});  //for test modo change params to currentuser
-    
+            const reviews = await Review.find({whoGotReviewed:req.params.id}).populate('whoReview');  //for test modo change params to currentuser
+
             if(user) {
                 
-                
                 if(process.env.NODE_ENV === 'test') return res.status(200).send(user);
-                res.render('profile.ejs', {user,currentuser:req.session.currentUser, posts:post})
+                res.render('profile.ejs', {user,currentuser:req.session.currentUser, posts:post,reviews})
                 
             }
             else{ 

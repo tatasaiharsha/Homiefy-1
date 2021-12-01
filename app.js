@@ -13,9 +13,12 @@ const usersRoute = require('./routes/users');
 const authRoute = require('./routes/auth');
 const postsRoute = require('./routes/posts');
 const commentsRoute = require('./routes/comments');
+const reviewsRoute = require('./routes/reviews');
 const MongoStore = require('connect-mongo')(session);
 const User = require('./db/models/User')
 const Post = require('./db/models/Post')
+var moment = require('moment'); 
+
 
 
 app.use(session({
@@ -64,10 +67,9 @@ app.get('/home/:id', cors(), async (req,res) => {
     
     }).populate("whoPosted")
 
+    const postDate = post.map((pos)=>{ return(moment(pos.createdAt).fromNow())})
 
-    
-
-    res.render('home.ejs',{user:user,posts:post,currentuser:req.session.currentUser})
+    res.render('home.ejs',{user:user,posts:post,postDate,currentuser:req.session.currentUser})
 })
 
 app.post('/home/:id/:keyword', cors(), async(req,res) =>{
@@ -118,5 +120,6 @@ app.use('/api/auth',cors(),authRoute);
 app.use('/api/users',cors(),usersRoute);
 app.use('/api/posts',cors(),postsRoute);
 app.use('/api/comments',cors(),commentsRoute);
+app.use('/api/reviews',cors(),reviewsRoute);
 
 module.exports = app;

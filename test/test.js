@@ -57,9 +57,6 @@ describe("Testing RestApi ", () => {
             expect(body).to.contain.property('lastName')
             expect(body).to.contain.property('email')
             expect(body).to.contain.property('password')
-            expect(body).to.contain.property('date')
-            expect(body).to.contain.property('following')
-            expect(body).to.contain.property('followers')
             expect(res.statusCode).to.equal(201)
             
             Cookies = res.headers['set-cookie'].pop().split(';')[0];
@@ -237,10 +234,7 @@ describe("Testing RestApi ", () => {
             expect(body).to.contain.property('lastName')
             expect(body).to.contain.property('email')
             expect(body).to.contain.property('password')
-            expect(body).to.contain.property('date')
-            expect(body).to.contain.property('following')
-            expect(body).to.contain.property('followers')
-
+           
 
             done();
         })
@@ -363,7 +357,6 @@ describe("Testing RestApi ", () => {
             expect(body).to.contain.property('whoPosted');
             expect(body).to.contain.property('title');
             expect(body).to.contain.property('body');
-            expect(body).to.contain.property('date');
             expect(res.statusCode).to.equal(201);
             expect(body.body).to.be.equal(post.body);
             expect(body.title).to.be.equal(post.title);
@@ -496,7 +489,6 @@ describe("Testing RestApi ", () => {
             expect(body).to.contain.property('whoPosted');
             expect(body).to.contain.property('title');
             expect(body).to.contain.property('body');
-            expect(body).to.contain.property('date');
             expect(body).to.contain.property('createdAt');
             expect(body).to.contain.property('updatedAt');
             expect(res.statusCode).to.equal(201);

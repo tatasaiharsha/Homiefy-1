@@ -38,23 +38,6 @@ router.get('/post/:postid', async(req,res)=> {
 });
 
 
-router.get('/:id', async(req,res)=> {
-
-    
-    try{
-        const posts = await Post.find({whoPosted:req.params.id})
-    
-        if(!posts || posts.length == 0){res.status(404).send({"error":"no post found"}); return;}
-            
-        res.status(200).send(posts);
-
-    }catch(err){
-
-        res.status(500).send(err);
-    }
-
-});
-
 router.post('/post/:id', async(req,res) => {
 
 

@@ -47,9 +47,7 @@ const UserSchema = new Schema({
         isVisiable:{
             type:String
         }
-    },
-    date: { type: Date, default: Date.now },
-   
+    }
 
 },
 {timestamps:true},

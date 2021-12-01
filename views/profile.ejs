@@ -46,7 +46,7 @@
                           <div class="profile"> 
                             
                             <% if(typeof currentuser.profilePicture != 'undefined'){ %>
-                              <img class="drop-btn" src="<%=currentuser.profilePicture%>">
+                              <img class="drop-btn" width="30px"src="<%=currentuser.profilePicture%>">
                               
                             <% } else{ %>  
                               <img class="drop-btn" width="30px" src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png">
@@ -100,7 +100,7 @@
                             <% if (user == currentuser){ %>
                               <a class="btn btn-info btn-lg " target="__blank" href="/api/users/profile-edit/<%=currentuser._id%>">Edit</a>
                             <% } else{ %>  
-                              <a class="btn btn-info btn-lg " target="__blank" href="">Review</a>
+                              <a class="btn btn-info btn-lg " target="__blank" href="#">Message</a>
                            <% } %>
                             
                             <!-- <a class="btn btn-info btn-lg " target="__blank" href="http://localhost:8001/profile/edit">Edit</a> -->
@@ -216,90 +216,95 @@
                         </div>
                       </div>
                       <hr>
-                      <!-- <div class="row">
-                        <div class="col-sm-3">
-                          <h6 class="mb-0">Mobile</h6>
-                        </div>
-                        <div class="col-sm-9 text-secondary">
-                          (320) 380-4539
-                        </div>
-                      </div>
-                      <hr>
-                      <div class="row">
-                        <div class="col-sm-3">
-                          <h6 class="mb-0">Address</h6>
-                        </div>
-                        <div class="col-sm-9 text-secondary">
-                          Bay Area, San Francisco, CA
-                        </div>
-                      </div>
-                      <hr> -->
-                      <!-- <div class="row">
-                        <div class="col-sm-12">
-                          <a class="btn btn-info " target="__blank" href="http://localhost:8001/profile/edit">Edit</a>
-                        </div>
-                      </div> -->
+                     
+
+
                     </div>
                   </div>
-    
-                  <div class="row gutters-sm">
+                    
+
+                  <div class="row gutters-sm flex-nowrap">
                     <div class="col-sm-6 mb-3">
                       <div class="card h-100">
                         <div class="card-body">
+
+                          <% if ( user._id == currentuser._id) { %>
                           <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">My</i>Reviews</h6>
-                          <small>Web Design</small>
-                          <div class="progress mb-3" style="height: 5px">
-                            <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                          <small>Website Markup</small>
-                          <div class="progress mb-3" style="height: 5px">
-                            <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                          <small>One Page</small>
-                          <div class="progress mb-3" style="height: 5px">
-                            <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                          <small>Mobile Template</small>
-                          <div class="progress mb-3" style="height: 5px">
-                            <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                          <small>Backend API</small>
-                          <div class="progress mb-3" style="height: 5px">
-                            <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
+                          
+                            <% } else{ %>
+                            
+                              <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Their</i>Reviews</h6>
+                          
+                            <% } %>
+
+
+                          
+  
+                          <form action="/api/reviews/review/<%=user._id%>" method="POST" class="mb-3 ">
+
+                            <div class="group-form row d-flex overflow-hidden">
+
+                               <textarea name="body" type="text"></textarea> 
+                              <button class="btn btn-primary lg" type="submit">Leave a review</button>
+
+                            </div>
+                            
+                          </form>
+                          
+                         <% if ( user._id == currentuser._id) { %>
+
+                          <% for (var i = 0; i < reviews.length ; i++) { %>
+
+                            <div class="mb-2">
+                            <p class="mb-0"><span  class="font-weight-bold"> <a href="/api/users/profile/<%=reviews[i].whoReview._id%>"><%= reviews[i].whoReview.firstName%> <%= reviews[i].whoReview.lastName%></a></span></p>
+                          
+                             <small ><%= reviews[i].body%></small>
+                            </div>
+                            
+                              <% } %>
+
+
+
+                        <% } else{ %>
+
+                         
+                          <% for (var i = 0; i < reviews.length ; i++) { %>
+
+                            <div class="mb-2">
+                            <p class="mb-0"><span  class="font-weight-bold"> <a href="/api/users/profile/<%=reviews[i].whoReview._id%>"><%= reviews[i].whoReview.firstName%> <%= reviews[i].whoReview.lastName%></a></span></p>
+                          
+                             <small ><%= reviews[i].body%></small>
+                            </div>
+                            
+                              <% } %>
+
+                          <%}%>
                         </div>
                       </div>
                     </div>
                     <div class="col-sm-6 mb-3">
                       <div class="card h-100">
                         <div class="card-body">
-                          <h6 class="d-flex align-items-center mb-1"><i class="material-icons text-info mr-2">My</i> Posts</h6>
+                          <% if ( user._id == currentuser._id) { %>
+                            <h6 class="d-flex align-items-center mb-1"><i class="material-icons text-info mr-2">My</i> Posts</h6>
+                            
+                              <% } else{ %>
+                              
+                                <h6 class="d-flex align-items-center mb-1"><i class="material-icons text-info mr-2">Their</i> Posts</h6>
+                            
+                              <% } %>
+  
                           
                           <% for (var i = 0; i < posts.length ; i++) { %>
 
                             <div class="mb-2">
-                            <p class="mb-0"><%= posts[i].title%></p>
+                              <p class="mb-0"><span class="font-weight-bold"> <a href="/api/posts/post/<%=posts[i]._id%>"><%= posts[i].title%></a></span></p>
                           
                              <small ><%= posts[i].body%></small>
                             </div>
                             
                           <% } %>
-                          <!-- <small>Website Markup</small>
-                          <div class="progress mb-3" style="height: 5px">
-                            <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                          <small>One Page</small>
-                          <div class="progress mb-3" style="height: 5px">
-                            <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                          <small>Mobile Template</small>
-                          <div class="progress mb-3" style="height: 5px">
-                            <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                          <small>Backend API</small>
-                          <div class="progress mb-3" style="height: 5px">
-                            <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div> -->
+                         
                         </div>
                       </div>
                     </div>

@@ -6,6 +6,9 @@ body {
 }
 
 
+.btn {
+    min-width: 250px;
+}
 .navbar{
     background-color: #c5cee4;
 
