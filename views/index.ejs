@@ -18,14 +18,14 @@
         <div class="col-12">
           <nav class="main-nav">
             <!-- ***** Logo Start ***** -->
-            <a href="home.html" class="logo">
+            <a href="/" class="logo">
             </a>
             <!-- ***** Logo End ***** -->
             <!-- ***** Menu Start ***** -->
             <ul class="nav">
-              <li><a href="home.html" class="active">Home</a></li>
-              <li><a href="about.html">About</a></li>
-              <li><a href="home.html">Contact Us</a></li> 
+              <li><a href="/home" class="active">Home</a></li>
+              <li><a href="/about">About</a></li>
+              <li><a href="/contact">Contact Us</a></li> 
               <li><div class="main-white-button"><a href="javascript: #show-login1();" id="show-login1"><i class="fa fa-plus"></i> LOG IN / Register</a></div></li> 
             </ul>        
             <!-- ***** Menu End ***** -->
@@ -45,17 +45,17 @@
         </div>
   <div class="registerForm">
         <!-- <form method="POST" action="https://homiefy-group-a.herokuapp.com/register" enctype="multipart/form-data"> -->
-        <form method="POST" action="/api/auth/register" enctype="multipart/form-data">
+        <form method="POST" action="/api/auth/register" enctype="application/json">
             <!--h3>Sign Up</h3> -->
             <div class="close-btn">&times;</div>
             <div class="form-group fname">
                 <!-- <label>First name</label> -->
-                <input type="text" name="fname" class="form-control" placeholder="First name" required />
+                <input type="text" name="firstName" class="form-control" placeholder="First name" required />
             </div>
 
             <div class="form-group">
                 <!-- <label>Last name</label> -->
-                <input type="text" name="lname" class="form-control" placeholder="Last name" required />
+                <input type="text" name="lastName" class="form-control" placeholder="Last name" required />
             </div>
 
             <div class="form-group">
@@ -64,9 +64,9 @@
                     class="form-control" placeholder="Enter email" required />
             </div>
 
-            <div>
+            <!-- <div>
                 <input type="file" name="profilePicture" accept=".jpg, .jpeg, .png">
-            </div>
+            </div> -->
 
             <div class="form-group">
                 <!-- <label>Password</label> -->
@@ -104,31 +104,5 @@
 
     </div>
     <script src="../js/index.js"></script>
-    <!-- 
-        <div class="loginForm">
-            <form method="POST" action="http://localhost:8001/login">
-              
-                <div class="form-group" >
-                   
-                    <input type="text" name="email" class="form-control" placeholder="Email" required/>
-                </div>
-                <div class="form-group">
-                    
-                    <input type="password" name="password" class="form-control" placeholder="password" required/>
-                </div>
-                <button class="btn" type="submit">Login</button>
-                <p class="message">
-                    Don't have an account? <a href="/#">Register now?</a>
-                </p>
-            </form>
-        </div> -->
-    <!--
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js">
-    </script>
-    <script>
-        $('.message a').click(function () {
-            $('form').animate({ height: "toggle", opacity: "toggle" }, "slow");
-        })
-    </script>-->
 </body>
 </html>

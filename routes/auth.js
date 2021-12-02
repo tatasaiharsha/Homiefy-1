@@ -13,19 +13,32 @@ router.post('/register', async (req,res)=>{
         email: req.body.email
     });
 
-    if(!newUser.email || !newUser.lastName || !newUser.password || !newUser.firstName) {res.status(409).send({"error":"missing fields"}); return;}
-    
-    const user = await User.findOne({email:newUser.email})
-    
-    if(user){ res.status(409).send({"error":"Email taken"}); return;};
+    if(!newUser.email || !newUser.lastName || !newUser.password || !newUser.firstName) {
 
+        if(process.env.NODE_ENV === 'test') return res.status(409).send({"error":"missing fields"});
+        
+        return res.redirect('/');
+    
+    }
+    
+    
+    
     try{
         
+        const user = await User.findOne({email:newUser.email})
+        if(user){ 
+            
+            if(process.env.NODE_ENV === 'test') return res.status(409).send({"error":"Email taken"})
+            return res.redirect('/')
+        
+        };
         req.session['currentUser'] = newUser;
         newUser.password = await bcrypt.hash(newUser.password, 10);  
         newUser.save();
-        res.status(201).send(newUser);
-        // res.redirect(`../users/profile/${newUser._id}`);
+        
+        if(process.env.NODE_ENV === 'test') return res.status(201).send(newUser);
+        
+        res.redirect(`/home/${newUser._id}`);
         
     }catch(err){
 
@@ -40,25 +53,31 @@ router.post('/register', async (req,res)=>{
 
 
 router.post('/login', async(req,res,next)=>{
-    // 
-    // if(req.session.currentUser){ return res.redirect(`../users/profile/${req.session.currentUser._id}`)}
+     
     const email = req.body.email;
     const password = req.body.password;
+    
+    // if(!email || !password) {res.status(409).send({"error":"missing fields"}); return;}
+    if(!email || !password) {
+        
 
-    if(!email || !password) {res.status(409).send({"error":"missing fields"}); return;}
-
-
-    const user = await User.findOne({email:email});
-  
-    if(!user){
-        res.status(404).send({"error":'account no found'});
-        return;
-        // return res.render('index', { msg: `No account associated with ${email} email` });
+        if(process.env.NODE_ENV === 'test') return res.status(409).send({"error":"missing fields"});
+        res.redirect('/'); return;
     
     }
+
+
     
-  
+    
     try{
+        const user = await User.findOne({email:email});
+      
+        if(!user){
+           
+            if(process.env.NODE_ENV === 'test') return res.status(404).send({"error":'account no found'});
+           return res.redirect('/');
+                    
+        }
         const validPassword = await bcrypt.compare(password, user.password)
         
 
@@ -67,12 +86,14 @@ router.post('/login', async(req,res,next)=>{
                 req.session['currentUser'] = user; 
                 
                 // req.session.save()
-                res.status(200).send({"msg":"logged in"});
+                if(process.env.NODE_ENV === 'test') return res.status(200).send({"msg":"logged in",user});
                 // res.status(200).send(req.session);
-                // res.redirect(`../users/profile/${user._id}`);
+                res.redirect(`/home/${user._id}`);
             }
         else{
-            res.status(400).send({"error":'wrong password'});
+            if(process.env.NODE_ENV === 'test') return res.status(400).send({"error":'wrong password'});
+            res.redirect('/');
+
             return;
         }
 
@@ -95,6 +116,8 @@ router.get('/logout', (req, res) => {
         if (err) {
             return console.log(err);
         }
+
+        if(process.env.NODE_ENV === 'test') return res.status(200).send({"msg":"logged out"});
         res.redirect('/');
     });
 });

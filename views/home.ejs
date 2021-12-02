@@ -4,131 +4,124 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homiefy</title>
+    <title>Feed Page</title>
+   
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <link rel="stylesheet" href="../css/home-index.css">
+   
 
 </head>
 <body>
-<header class="header-area header-sticky wow slideInDown">
-	<div class="container">
-      <div class="row">
-        <div class="col-12">
-          <nav class="main-nav">
-            <!-- ***** Logo Start ***** -->
-            <a href="home.html" class="logo">
-            </a>
-            <!-- ***** Logo End ***** -->
-            <!-- ***** Menu Start ***** -->
-            <ul class="nav">
-              <li><a href="home.html" class="active">Home</a></li>
-              <li><a href="about.html">About</a></li>
-              <li><a href="home.html">Contact Us</a></li> 
-              <li><div class="main-white-button"><a href="javascript: #show-login1();" id="show-login1"><i class="fa fa-plus"></i> LOG IN / Register</a></div></li> 
-            </ul>        
-            <!-- ***** Menu End ***** -->
-          </nav>
-        </div>
-      </div>
-    </div>
-</header>
-<div class="main-banner">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="top-text header-text">
-            <h6>Hello There!</h6>
-            <h2>Are you ready to find your Homies ?</h2>
-          </div>
-        </div>
-  <div class="registerForm">
-        <!-- <form method="POST" action="https://homiefy-group-a.herokuapp.com/register" enctype="multipart/form-data"> -->
-        <form method="POST" action="/api/auth/register" enctype="multipart/form-data">
-            <!--h3>Sign Up</h3> -->
-            <div class="close-btn">&times;</div>
-            <div class="form-group fname">
-                <!-- <label>First name</label> -->
-                <input type="text" name="fname" class="form-control" placeholder="First name" required />
-            </div>
-
-            <div class="form-group">
-                <!-- <label>Last name</label> -->
-                <input type="text" name="lname" class="form-control" placeholder="Last name" required />
-            </div>
-
-            <div class="form-group">
-                <!-- <label>Email address</label> -->
-                <input type="email" name="email" pattern="[^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.+-]+\.edu$]"
-                    class="form-control" placeholder="Enter email" required />
-            </div>
-
-            <div>
-                <input type="file" name="profilePicture" accept=".jpg, .jpeg, .png">
-            </div>
-
-            <div class="form-group">
-                <!-- <label>Password</label> -->
-                <input type="password" name="password" class="form-control" placeholder="Enter password" required />
-            </div>
-
-            <button class="main-white-button" type="submit">Register</button>
-            <p class="text-white">Already registered? <a id="show-login2">Log in</a></p>
-        </form>
-
-
-    </div>
-
-    <div class="loginForm ">
-        <!-- <form method="POST" action="https://homiefy-group-a.herokuapp.com/login" enctype="multipart/form-data"> -->
-        <form method="POST" action="/api/auth/login" Content-Type="application/json">
-            <!--<h3>LOG IN FORM</h3> -->
-
-
-            <div class="close-btn">&times;</div>
-            <div class="form-group">
-                <!-- <label>Email address</label> -->
-                <input type="email" name="email" pattern="[^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.+-]+\.edu$]"
-                    class="form-control" placeholder="Enter email" required />
-            </div>
-
-            <div class="form-group">
-                <!-- <label>Password</label> -->
-                <input type="password" name="password" class="form-control" placeholder="Enter password" required />
-            </div>
-
-            <button class="main-white-button" type="submit">Log in</button>
-            <p class="message text-white">Not registered? <a id="show-register">Register</a></p>
-        </form>
-
-    </div>
-    <script src="../js/index.js"></script>
-    <!-- 
-        <div class="loginForm">
-            <form method="POST" action="http://localhost:8001/login">
-              
-                <div class="form-group" >
-                   
-                    <input type="text" name="email" class="form-control" placeholder="Email" required/>
-                </div>
-                <div class="form-group">
+ 
+      <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light"> <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="navbar-toggler-icon"></span> </button> <a class="navbar-brand" href="/">Homiefy</a>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="navbar-nav">
+                    </ul>
+                    <form class="form-inline" action="/home/<%=currentuser._id%>/keyword=" method="POST">
                     
-                    <input type="password" name="password" class="form-control" placeholder="password" required/>
+                    <input class="form-control mr-sm-2" type="text" name="keyword"/> <button class="btn btn-primary my-2 my-sm-0" type="submit"> Search </button>
+                 </form>
+                    
+                    <ul class="navbar-nav ml-md-auto">
+                      <li class="nav-item dropdown"> 
+                        <div class="dropdown">
+                          
+                          <div class="profile"> 
+                            
+                            <% if(typeof user.profilePicture != 'undefined'){ %>
+
+                                
+                              <img class="drop-btn" src="<%=user.profilePicture%>">
+                              
+                            <% } else{ %>  
+                              <img class="drop-btn" width="30px"src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png">
+                           <% } %>
+                              <div class="dropdown-content">
+                                  <ul>
+                                      <li><i class='bx bx-user'></i><span><a href="/api/users/profile/<%=currentuser._id%>">Profile</a></span></li>
+                                      <li><i class='bx bx-cog'></i><span><a href="/api/users/profile-edit/<%=currentuser._id%>">Settings</a></span></li>
+                                      <li><i class='bx bx-log-in-circle'></i><span><a href="/api/auth/logout">Logout</a></span></li>
+                                  </ul>
+                              </div>
+                          </div>
+                        </div>
+                      </li>                    
+                  </ul>
                 </div>
-                <button class="btn" type="submit">Login</button>
-                <p class="message">
-                    Don't have an account? <a href="/#">Register now?</a>
-                </p>
-            </form>
-        </div> -->
-    <!--
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js">
-    </script>
+            </nav>
+        </div>
+    </div>
+</div>
+
+
+
+    <div class="container mt-4 mb-5">
+        <div class="d-flex justify-content-center row">
+            <div class="col-md-10">
+                <div class="feed p-2">
+
+                   
+                    <div class="d-flex flex-row justify-content-between align-items-center p-2 bg-white border">
+                        <!-- <div class="feed-text px-2"> -->
+                            <!-- <h6 class="text-black-50 mt-2">What's on your mind</h6> -->
+
+                        <div class="form">
+                            <form action="/api/posts/post/<%=currentuser._id%>" method="POST">
+
+                                <input  type="text" name="title" placeholder=" Post title">
+                                <!-- <input  type="text" name="body" placeholder=" Post title"> -->
+                                <div><textarea  type="text" name="body" class="form-control col-xs-12" rows="3" cols="100" placeholder="Make a post"> </textarea></div>
+                                <div><input class="btn-primary"type="submit"  value="post"/></div>
+                            </form>
+                        
+                        </div>
+                           
+                            
+                    </div>
+                
+                  
+                    <div class="col-md-30">
+                        <div class="feed p-2">
+                            <% for (var i = 0; i < posts.length ; i++) { %>
+        
+                               
+                                <div class="bg-light border mt-2">
+                                    
+                                    <div>
+                                        <div class="d-flex flex-row justify-content-between align-items-center p-2 border-bottom">
+                                            <div class=" d-flex flex-row align-items-center feed-text px-2">
+                                                <% if(typeof posts[i].whoPosted.profilePicture != 'undefined'){ %>
+                                                    <img class="rounded-circle" src="<%=posts[i].whoPosted.profilePicture%>" width="45">  
+                                                  <% } else{ %>  
+
+                                                    
+                                                    <a href="/api/users/profile/<%=posts[i].whoPosted._id%>"><img class="rounded-circle" src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" width="45"></a>
+                                                 <% } %>
+                                                <div class="d-flex flex-column flex-wrap ml-2"><span class="font-weight-bold"><a href="/api/users/profile/<%=posts[i].whoPosted._id%>"> <%= posts[i].whoPosted.firstName%> <%= posts[i].whoPosted.lastName%></a></span><span class="text-black-50 time"> <%= postDate[i]%></span></div>
+                                            </div>
+                                            <div class="feed-icon px-2"><i class="fa fa-ellipsis-v text-black-50"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-column flex-wrap ml-2"><span class="font-weight-bold"><a href="/api/posts/post/<%=posts[i]._id%>"> <%= posts[i].title%></span></a></div>
+            
+                                    <div class="p-2 px-3"><span><%= posts[i].body%></span></div>
+                                    <div class="d-flex justify-content-end socials p-2 py-3"><i class="fa fa-thumbs-up"></i><i class="fa fa-comments-o"></i><i class="fa fa-share"></i></div>
+                                </div>
+                             <% } %>
+                     </div>
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
-        $('.message a').click(function () {
-            $('form').animate({ height: "toggle", opacity: "toggle" }, "slow");
-        })
-    </script>-->
+        $(document).ready(function(){
+           $('.dropdown-toggle').dropdown()
+       });
+       </script>
 </body>
 </html>
