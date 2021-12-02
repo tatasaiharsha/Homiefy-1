@@ -1,11 +1,9 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');;
-// const fileUpload = require('express-fileupload');
 const cors = require('cors')
 const cookieParser = require("cookie-parser");
 const session = require('express-session');
-// const multer = require("multer");
 const bodyParser = require('body-parser');
 const usersRoute = require('./routes/users');
 const authRoute = require('./routes/auth');
@@ -63,7 +61,7 @@ app.get('/home/:id', cors(), async (req,res) => {
             whoPosted:{$ne:req.session.currentUser._id}
     
     }).populate("whoPosted")
-
+    
     const postDate = post.map((pos)=>{ return(moment(pos.createdAt).fromNow())})
 
     res.render('home.ejs',{user:user,posts:post,postDate,currentuser:req.session.currentUser})
@@ -72,35 +70,41 @@ app.get('/home/:id', cors(), async (req,res) => {
 app.post('/home/:id/:keyword', cors(), async(req,res) =>{
 
     if(!req.session.currentUser){return res.redirect('/');}
-
+    
     const searchedInUser = await User.find(
         {
-           $and: [
+            $and: [
+                { $or: 
+                    [
+                        {firstName: {$eq : req.body.keyword}}, 
+                        {lastName: {$eq : req.body.keyword}},
+                        {'college.name':   { '$regex' : `${req.body.keyword}`, $options: '-i' }},
+                        {'college.major':   { '$regex' : `${req.body.keyword}`, $options: '-i' }}
+                    ] 
+                }
+            ]
+        }); 
+        const searchedInPost = await Post.find(
+            {
+                $and: [
                     { $or: 
-                            [
-                                {firstName: {$eq : req.body.keyword}}, 
-                                {lastName: {$eq : req.body.keyword}},
-                                {'college.name':  { $eq:req.body.keyword }},
-                                {'college.major':  { $eq: req.body.keyword }}
-                            ] 
+                        [
+                            {title: { '$regex' : `${req.body.keyword}`, $options: '-i' }}, 
+                            {body: { '$regex' : `${req.body.keyword}`, $options: '-i' }}
+                            
+                        ] 
                     }
                 ]
-   }); 
-    const searchedInPost = await Post.find(
-      {
-            $and: [
-                        { $or: 
-                                [
-                                    {title: { '$regex' : `${req.body.keyword}`, $options: '-i' }}, 
-                                    {body: { '$regex' : `${req.body.keyword}`, $options: '-i' }}
-                                
-                                ] 
-                        }
-                    ]
+                
+            }).populate("whoPosted").populate('college')
 
-    }).populate("whoPosted") 
-
-    return res.redirect(200,'/',searched={searchedInPost,searchedInUser})
+            const userMatch= searchedInUser.map( (result)=> { return result})
+            let postMatch = searchedInPost.map( (result)=> { return result})
+            results = {...userMatch,...postMatch}
+            const length =  Object.keys(results).length;
+           
+            
+    return res.render('search.ejs',{currentuser:req.session.currentUser,results,length})
 
 })
 

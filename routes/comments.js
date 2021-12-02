@@ -21,12 +21,11 @@ router.post('/comment/:id/:postid', async(req,res) => {
     
     try{
 
-        // const user = await User.findById(req.params.id)
         const post = await Post.findById(req.params.postid)
         if(!post){ res.status(404).send({"error":"the post does not exist or has as been deleted"}); return;}
         
         newComment.save()
-        post.comments.push(newComment)
+        // post.comments.push(newComment)
         post.save();
         // res.status(201).send(post)
         res.status(201).redirect(`/api/posts/post/${req.params.postid}`)

@@ -5,7 +5,7 @@ const Post = require('../db/models/Post')
 const Review = require('../db/models/Review')
 const fileUpload = require('express-fileupload');
 
-router.get('/profile/:id', async(req,res)=>{
+router.get('/profile/:id', async(req,res,next)=>{
 
 
     if (!req.session.currentUser){ 
@@ -26,12 +26,13 @@ router.get('/profile/:id', async(req,res)=>{
                     if(user._id == req.params.id) return res.status(200).send(user);
                 }
                 res.render('profile.ejs', {user:req.session.currentUser,currentuser:req.session.currentUser, posts:post,reviews})
-                
+                next()
             }
             else {
                 
                 if(process.env.NODE_ENV === 'test') return res.status(404).send({"error":'Account no longer exist'})
-                res.redirect(404,'/',msg={"error":'Account no longer exist'})}
+                res.redirect('/')
+            }
            
         }catch(err){
     
@@ -56,7 +57,7 @@ router.get('/profile/:id', async(req,res)=>{
             else{ 
 
                 if(process.env.NODE_ENV === 'test') return res.status(404).send({"error":'Account no longer exist'})
-                res.redirect(404,'/',msg={"error":'Account no longer exist'})
+                res.redirect('/')
             }
            
         }catch(err){
@@ -76,7 +77,7 @@ router.get('/profile-edit/:id', async (req,res) => {
 
     if(!req.session.currentUser){
         if(process.env.NODE_ENV === 'test') return res.status().send({"error":"login first"})
-        res.redirect(401,'/',msg={"error":"login first"} )
+        res.redirect('/' )
     }
 
     try{
@@ -101,7 +102,7 @@ router.post('/profile-edit/:id', async(req,res)=>{
     if(!req.session.currentUser){
         
         if(process.env.NODE_ENV === 'test') return res.status(403).send({"error":"Login first"});
-        return res.redirect('/', msg={"error":"Login first"});
+        return res.redirect('/');
     
     }
     if(req.params.id != req.session.currentUser._id){ 
@@ -115,7 +116,7 @@ router.post('/profile-edit/:id', async(req,res)=>{
     if(Object.keys(req.body).length === 0){ 
         
         if(process.env.NODE_ENV === 'test') return res.status(409).send({"error":"no empty fields"})
-        return res.redirect(409,`/profile-edit/${req.session.currentUser}`,msg={"error":"no empty fields"})}
+        return res.redirect(`/profile-edit/${req.session.currentUser}`)}
 
     if(req.body.password){
         
@@ -129,14 +130,14 @@ router.post('/profile-edit/:id', async(req,res)=>{
         
     }
     try{
-
-        if(!req.body.profilePicture){ delete req.body.profilePicture;} 
+        
+        if(!req.body.profilePicture || !req.body.password){ delete req.body.profilePicture;delete req.body.password} 
         
         const user = await User.findByIdAndUpdate(req.params.id,{$set:req.body},{useFindAndModify: false,new: true});
         if(process.env.NODE_ENV === 'test') return res.status(200).send(user);
         
         // return res.redirect(`users/profile/${req.session.currentUser._id}`);
-        res.redirect(`../profile-edit/${req.params.id}`)
+        res.redirect(`../profile-edit/${req.session.currentUser._id}`)
 
     }catch(err){
 

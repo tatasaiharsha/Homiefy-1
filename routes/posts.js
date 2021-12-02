@@ -27,8 +27,10 @@ router.get('/post/:postid', async(req,res)=> {
         const commentDate = comment.map((comm)=>{ return(moment(comm.createdAt).fromNow())})
         const user = post.whoPosted
 
+
+    
         if(process.env.NODE_ENV === 'test') return res.status(200).send(post);
-        res.status(200).render('posts.ejs',{user,currentuser:req.session.currentUser, posts:post, postDate, comments:comment, commentDate});
+        res.render('posts.ejs',{user,currentuser:req.session.currentUser, posts:post, postDate, comments:comment, commentDate});
 
     }catch(err){
 

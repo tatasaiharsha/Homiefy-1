@@ -11,6 +11,7 @@ const UserSchema = new Schema({
     profilePicture: { type: String},
     college: {
         type:Object,
+        default:{name:'',major:'',year:'',url:''},
         name: {
             type:String
         },
@@ -26,6 +27,7 @@ const UserSchema = new Schema({
     },
     socialMediaLinks:{
         type:Object,
+        default:{facebook:'',twitter:'',linkedin:'',instagram:''},
         facebook: {
             type:String
         },
@@ -50,7 +52,7 @@ const UserSchema = new Schema({
     }
 
 },
-{timestamps:true},
+{timestamps:true, minimize:false},
 { collection : 'users' }
 );
 

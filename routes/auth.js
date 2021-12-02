@@ -13,17 +13,15 @@ router.post('/register', async (req,res)=>{
         email: req.body.email
     });
 
-    // if(!newUser.email || !newUser.lastName || !newUser.password || !newUser.firstName) {res.status(409).send({"error":"missing fields"}); return;}
     if(!newUser.email || !newUser.lastName || !newUser.password || !newUser.firstName) {
 
         if(process.env.NODE_ENV === 'test') return res.status(409).send({"error":"missing fields"});
         
-        return res.redirect(409,'/',msg={"error":"missing fields"});
+        return res.redirect('/');
     
     }
     
     
-    // if(user){ res.status(409).send({"error":"Email taken"}); return;};
     
     try{
         
@@ -31,7 +29,7 @@ router.post('/register', async (req,res)=>{
         if(user){ 
             
             if(process.env.NODE_ENV === 'test') return res.status(409).send({"error":"Email taken"})
-            return res.redirect(409,'/',msg={"error":"Email taken"})
+            return res.redirect('/')
         
         };
         req.session['currentUser'] = newUser;
@@ -40,7 +38,7 @@ router.post('/register', async (req,res)=>{
         
         if(process.env.NODE_ENV === 'test') return res.status(201).send(newUser);
         
-        res.redirect(`../users/profile/${newUser._id}`);
+        res.redirect(`/home/${newUser._id}`);
         
     }catch(err){
 
@@ -64,7 +62,7 @@ router.post('/login', async(req,res,next)=>{
         
 
         if(process.env.NODE_ENV === 'test') return res.status(409).send({"error":"missing fields"});
-        res.status(409).redirect('/',msg={"error":"missing fields"}); return;
+        res.redirect('/'); return;
     
     }
 
@@ -77,7 +75,7 @@ router.post('/login', async(req,res,next)=>{
         if(!user){
            
             if(process.env.NODE_ENV === 'test') return res.status(404).send({"error":'account no found'});
-           return res.status(404).redirect('/',msg={"error":'account no found'});
+           return res.redirect('/');
                     
         }
         const validPassword = await bcrypt.compare(password, user.password)
@@ -94,7 +92,7 @@ router.post('/login', async(req,res,next)=>{
             }
         else{
             if(process.env.NODE_ENV === 'test') return res.status(400).send({"error":'wrong password'});
-            res.status(404).redirect('/',{"error":"wrong password"});
+            res.redirect('/');
 
             return;
         }
